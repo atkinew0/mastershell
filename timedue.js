@@ -4,6 +4,7 @@ I(0) = 1 day
 I(1) = 4 days
 if n > 1 then I(n) = I(n-1) * 2 
 */
+
 module.exports = {
 
 
