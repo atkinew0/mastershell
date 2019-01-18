@@ -2,7 +2,8 @@ import React from 'react';
 import { EventEmitter } from 'events';
 
 const PORT = '3001';
-const HOST = `127.0.0.1:${ PORT }`;
+//const HOST = `127.0.0.1:${ PORT }`;
+const HOST = "mv2-dev.us-east-1.elasticbeanstalk.com";
 
 const style = {
     float:'left',

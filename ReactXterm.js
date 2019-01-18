@@ -28,8 +28,9 @@ Terminal.applyAddon(fullscreen);
 Terminal.applyAddon(search);
 Terminal.applyAddon(winptyCompat);
 
-const PORT = '3001';
+const PORT = '8081';
 const HOST = `127.0.0.1:${ PORT }`;
+//const HOST = "mv2-dev.us-east-1.elasticbeanstalk.com"
 const SOCKET_URL = `ws://${ HOST }/terminals/`;
 
 const containerStyle ={
@@ -441,11 +442,32 @@ export default class ReactTerminal extends React.Component {
     return (
       <div style={containerStyle}>
         <Prompt color={this.state.promptColor} prompt={this.state.prompt}/>
-        <WordBox stopReview={this.stop} mode={this.state.mode} completed={this.completed()} focus={this.focusTerm} setmode={this.setMode} questionsCall={this.handleSRS} lastEntry={this.state.lastEntry} words={this.state.command}/>
+
+        <WordBox 
+         stopReview={this.stop}
+         mode={this.state.mode} 
+         completed={this.completed()} 
+         focus={this.focusTerm} 
+         setmode={this.setMode} 
+         questionsCall={this.handleSRS} 
+         lastEntry={this.state.lastEntry} 
+         words={this.state.command}/>
+
         <div id={"terminal-container"}  style={{
         float:'left', top: 0, left: 0, width: '80', height: '100%'
         }}></div>
-        <ControlBox completed={this.completed()} score={this.state.score} locked={this.locked} levels={this.state.levels} setmode={this.setMode} focus={this.focusTerm} questionsCall={this.handleQuestions} words={this.state.levels}/>
+
+        <ControlBox 
+         completed={this.completed()}
+         score={this.state.score} 
+         locked={this.locked} 
+         levels={this.state.levels} 
+         setmode={this.setMode} 
+         focus={this.focusTerm} 
+         questionsCall={this.handleQuestions} 
+         words={this.state.levels}/>
+
+         <p>BETA: 'hint' for a hint or 'next' to skip question</p>
     </div>
     )
   }
@@ -477,17 +499,20 @@ export default class ReactTerminal extends React.Component {
           this.socket = new WebSocket(SOCKET_URL + processId);
           console.log("The socket at",SOCKET_URL+processId);
           console.log("Socket",this.socket);
+          
           this.socket.onopen = () => {
             this.term.attach(this.socket, true , false, (comp) => { console.log("Callback" ,comp)} );
             this.term.writeln("Welcome to the beginning of mastershell");
           };
           this.socket.onclose = () => {
             this.term.writeln('Server disconnected!');
-            this._connectToServer();
+            this.term.writeln('Auto reconnect disabled, refresh page to restart')
+            //setInterval(() => this._connectToServer(), 2500);
           };
           this.socket.onerror = () => {
-            this.term.writeln('Server disconnected!');
-            this._connectToServer();
+            this.term.writeln('Socket error, disconnected!');
+            this.term.writeln('Auto reconnect disabled, refresh page to restart')
+            //setInterval(() => this._connectToServer(), 2500);
           };
         });
       },

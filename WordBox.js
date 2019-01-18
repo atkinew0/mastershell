@@ -10,7 +10,7 @@ const style = {
 }
 
 const PORT = '3001';
-const HOST = `127.0.0.1:${ PORT }`;
+const HOST = `mv2-dev.us-east-1.elasticbeanstalk.com`;
 
 const titleStyle ={
     border:'2px solid black',
