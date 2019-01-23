@@ -44,7 +44,7 @@ stripFlags(command){
 
     //strip unnecessary spaces
     
-    command = command.filter(elem => elem != "");
+    command = command.filter(elem => elem !== "");
     
     command = command.join(" ");
 

@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import { Terminal } from 'xterm';
 import TimeDue from './timedue.js'
 import CheckSame from './checkSame.js';
+import { connect } from 'react-redux';
 // import * as attach from 'xterm/lib/addons/attach/attach';
 import * as attach from './addons/attach';
 import * as fit from 'xterm/lib/addons/fit/fit';
@@ -14,8 +15,8 @@ import * as fullscreen from 'xterm/lib/addons/fullscreen/fullscreen';
 import * as search from 'xterm/lib/addons/search/search';
 import * as winptyCompat from 'xterm/lib/addons/winptyCompat/winptyCompat';
 
-import { runInThisContext } from 'vm';
-import { puts } from 'util';
+import * as actions from './actions';
+
 
 var parser = require('./parseCom')
 parser.init();
@@ -54,7 +55,7 @@ for(let i = 0; i < MAX; i++){
 }
 
 
-export default class ReactTerminal extends React.Component {
+class ReactTerminal extends React.Component {
   constructor(props) {
     super(props);
 
@@ -74,9 +75,11 @@ export default class ReactTerminal extends React.Component {
       levels:levels,
       nextQuestion:0,
       mode:'',
-      score:0
+      score:0,
+      userID:''
     };
   }
+
 
   componentDidMount() {
     this.term = new Terminal({
@@ -114,17 +117,17 @@ export default class ReactTerminal extends React.Component {
 
       if(key.charCodeAt(0) === 13){
         
-        if(this.term.textarea.value === "next" && this.state.mode != ""){
+        if(this.term.textarea.value === "next" && this.state.mode !== ""){
           
           this.setState({nextQuestion:this.state.nextQuestion+1}, this.updatePrompt);
         }
 
-        if(this.term.textarea.value === "hint" && this.state.mode!= ""){
+        if(this.term.textarea.value === "hint" && this.state.mode !== ""){
           let hint = this.state.questions[this.state.nextQuestion].answer;
           
           this.term.write("  "+hint);
           this.setState({score:this.state.score -1});
-          console.log("Hint state", this.state.questions[this.state.nextQuestion].answer)
+          
         }
 
         if(this.state.mode === 'levels' || this.state.mode === 'srs'){
@@ -134,53 +137,21 @@ export default class ReactTerminal extends React.Component {
 
         command = parser.check(this.term.textarea.value);
         console.log("!Checking textarea",this.term.textarea.value)
-        console.log("Command returned as legit linux comand",command);
+        console.log("Command returned as linux comand",command);
         
 
-        if(command){
+        if(command)
 
           this._makeCommand(command);
-          // console.log("Command true so update",command)
-          // let commandObject = { 
-          //                       command: command,
-          //                       typed: this.term.textarea.value       };
-
-          //  if(!this.state.command.includes(commandObject)){
-          //    this.setState( {command: [...this.state.command, commandObject] });
-          //  }
         }
 
         this.term.textarea.value ="";
 
-        //this.term.writeln("echo !!");
-        // setTimeout(() => this.term._sendData("echo !!\r", 100));
-        // setTimeout(() => {
-        //   comm = this.term._getCommand();
-        //   console.log("Command in ReactXterm of ", comm);
-        //   command  = parser.checkCommand(comm);
-          
-        //   console.log('Checkcommand returned', command);
-
-        //   if(command){
-            
-        //     let commandObject = { command: command,
-        //     typed: parser.repeat().join("") };
-
-        //     console.log("Command obj putitng into state", commandObject);
-            
-        //     if(!this.state.command.includes(commandObject)){
-             
-        //       this.setState( { command: [...this.state.command, commandObject] } );
-        //     }
-            
-        //   }
-        //   parser.clear();
-        // }, 500);
         
-        
+      if(this.state.userID === ''){
+        this._getUserId();
       }
       
-      //console.log("Command after checkBuffer",command);
      
     });
 
@@ -272,7 +243,7 @@ export default class ReactTerminal extends React.Component {
     }
     
     let levels = this.state.levels.map(elem => {
-      if (elem.number == levelSelected)
+      if (elem.number === levelSelected)
           elem.selected = true;
       else
           elem.selected = false;
@@ -289,7 +260,7 @@ export default class ReactTerminal extends React.Component {
 
   handleSRS = (questionsArray) => {
 
-    if(questionsArray.length == 0){
+    if(questionsArray.length === 0){
       console.log("No questions due found")
       this.setState({prompt:"No questions due for review"},() => {setTimeout(() => this.setState({prompt:"prompt"}), 2000)})
       
@@ -304,7 +275,7 @@ export default class ReactTerminal extends React.Component {
     //sets the top prompt to be whatever the next question in this.state.questions is
     let questions = this.state.questions;
     
-    if(this.state.questions.length == 0){
+    if(this.state.questions.length === 0){
       return;
     }
     //console.log("Next question",this.state.nextQuestion," and ",questions.length)
@@ -314,7 +285,7 @@ export default class ReactTerminal extends React.Component {
 
       let currentLevel = this.state.questions[0].level;
       let levels = this.state.levels.map(elem =>{
-        if(elem.number == currentLevel)
+        if(elem.number === currentLevel)
           elem.finished = true;
 
         return elem;
@@ -347,7 +318,7 @@ export default class ReactTerminal extends React.Component {
       questions[this.state.nextQuestion].answered = true;
       
       if(this.state.mode === 'srs'){
-        this.updateDue(questions[this.state.nextQuestion], correct)
+        this.updateDue(questions[this.state.nextQuestion], correct, this.state.userID);
       }
 
       this.setState({questions:questions, nextQuestion: this.state.nextQuestion + 1, score:this.state.score + 5}, this.updatePrompt);
@@ -358,7 +329,7 @@ export default class ReactTerminal extends React.Component {
 
       if(this.state.mode === 'srs'){
         
-        this.updateDue(questions[this.state.nextQuestion], correct)
+        this.updateDue(questions[this.state.nextQuestion], correct, this.state.userID);
       }
     }
     
@@ -366,24 +337,22 @@ export default class ReactTerminal extends React.Component {
 
   }
 
-  updateDue(question, correct){
+  updateDue(question, correct, uid){
 
     console.log("Question we are about to update",question)
     
     let dueObj = TimeDue.update(question,correct);
     let repetitions = correct ? question.repetitions + 1 : 0;
 
-    console.log(dueObj)
 
     let theBody = {
       id:question.id,
       due:dueObj.timeDue,
       daysTillDue:dueObj.futureDays,
-      repetitions: repetitions
+      repetitions: repetitions,
+      uid:uid
     }
 
-
-    //fetch(`http://${HOST}/api/srs`, {method:'PUT', body:theBody});
     let theReq = `http://${HOST}/api/srs`;
 
     fetch(theReq, {
@@ -410,7 +379,6 @@ export default class ReactTerminal extends React.Component {
   locked = () => {
 
     let oldPrompt = this.state.prompt;
-    console.log("About to reset the prompt herenow")
 
     this.setState({prompt:"Locked"}, () => { setTimeout(() => this.setState({prompt:oldPrompt}), 500)})
   }
@@ -436,6 +404,19 @@ export default class ReactTerminal extends React.Component {
   completed(){
     return {done: this.state.nextQuestion, total:this.state.questions.length }
   }
+
+  _getUserId(){
+
+    const myHeaders = new Headers();
+    myHeaders.append('Authorization',localStorage.getItem('token'));
+  
+    fetch(`http://${HOST}/userid`, {headers:myHeaders}).then( response => {
+    return response.json() }).then (text =>  {
+              
+              this.setState({userID:text.userId });
+              
+    });
+  }
  
   render() {
 
@@ -444,6 +425,7 @@ export default class ReactTerminal extends React.Component {
         <Prompt color={this.state.promptColor} prompt={this.state.prompt}/>
 
         <WordBox 
+         userID={this.state.userID}
          stopReview={this.stop}
          mode={this.state.mode} 
          completed={this.completed()} 
@@ -474,13 +456,18 @@ export default class ReactTerminal extends React.Component {
 
 
 
+
   _connectToServer() {
 
     const theReq = `http://${ HOST }/terminals/?cols=${ this.term.cols }&rows=${ this.term.rows }`;
+    const myHeaders = new Headers();
+    myHeaders.append('Authorization',localStorage.getItem('token'))
 
     fetch(
       theReq,
-      { method: 'POST' }
+      { method: 'POST',
+      headers:myHeaders
+     }
     ).then(
       res => {
         if (!res.ok) {
@@ -503,6 +490,9 @@ export default class ReactTerminal extends React.Component {
           this.socket.onopen = () => {
             this.term.attach(this.socket, true , false, (comp) => { console.log("Callback" ,comp)} );
             this.term.writeln("Welcome to the beginning of mastershell");
+
+            //Note Redux action creator to allow the signout component access to close websocket
+            this.props.websocket(this.socket);
           };
           this.socket.onclose = () => {
             this.term.writeln('Server disconnected!');
@@ -593,3 +583,6 @@ function listenToWindowResize(callback) {
 
   window.addEventListener('resize', resizeThrottler, false);
 }
+
+export default connect(null,actions)(ReactTerminal);
+

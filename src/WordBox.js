@@ -9,15 +9,16 @@ const style = {
     border:"black solid 2px"
 }
 
-const PORT = '3001';
-const HOST = `mv2-dev.us-east-1.elasticbeanstalk.com`;
+//const PORT = '3001';
+//const HOST = `mv2-dev.us-east-1.elasticbeanstalk.com`;
+const HOST = "localhost:8081";
 
 const titleStyle ={
     border:'2px solid black',
     background: '#e7e4e4'
 }
 
-export default class WordBox extends React.Component {
+class WordBox extends React.Component {
     constructor(props){
         super(props);
 
@@ -30,9 +31,14 @@ export default class WordBox extends React.Component {
         this.props.setmode("srs");
         this.props.focus();
 
-        const theRequest = `http://${HOST}/api/srs`;
 
-        fetch(theRequest,{ method:'GET'}).then( response => {
+        const myHeaders = new Headers();
+        myHeaders.append('Authorization',localStorage.getItem('token'));
+        console.log("My props now",this.props)
+        
+        const theRequest = `http://${HOST}/api/srs/?uid=${this.props.userID}`;
+
+        fetch(theRequest,{ method:'GET', headers:myHeaders}).then( response => {
 
             response.text().then( resText => {
                 console.log(resText);
@@ -40,6 +46,8 @@ export default class WordBox extends React.Component {
                 this.props.questionsCall(resJSON);
             })
         })
+
+
 
     }
     renderButton(){
@@ -74,5 +82,7 @@ export default class WordBox extends React.Component {
         );
     }
 
-
 }
+
+
+export default WordBox;;
