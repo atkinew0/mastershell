@@ -18,6 +18,9 @@ import * as winptyCompat from 'xterm/lib/addons/winptyCompat/winptyCompat';
 import * as actions from './actions';
 
 
+import { runInThisContext } from 'vm';
+import { puts } from 'util';
+
 var parser = require('./parseCom')
 parser.init();
 
@@ -117,17 +120,17 @@ class ReactTerminal extends React.Component {
 
       if(key.charCodeAt(0) === 13){
         
-        if(this.term.textarea.value === "next" && this.state.mode !== ""){
+        if(this.term.textarea.value === "next" && this.state.mode != ""){
           
           this.setState({nextQuestion:this.state.nextQuestion+1}, this.updatePrompt);
         }
 
-        if(this.term.textarea.value === "hint" && this.state.mode !== ""){
+        if(this.term.textarea.value === "hint" && this.state.mode!= ""){
           let hint = this.state.questions[this.state.nextQuestion].answer;
           
           this.term.write("  "+hint);
           this.setState({score:this.state.score -1});
-          
+          console.log("Hint state", this.state.questions[this.state.nextQuestion].answer)
         }
 
         if(this.state.mode === 'levels' || this.state.mode === 'srs'){
@@ -137,21 +140,56 @@ class ReactTerminal extends React.Component {
 
         command = parser.check(this.term.textarea.value);
         console.log("!Checking textarea",this.term.textarea.value)
-        console.log("Command returned as linux comand",command);
+        console.log("Command returned as legit linux comand",command);
         
 
-        if(command)
+        if(command){
 
           this._makeCommand(command);
+          // console.log("Command true so update",command)
+          // let commandObject = { 
+          //                       command: command,
+          //                       typed: this.term.textarea.value       };
+
+          //  if(!this.state.command.includes(commandObject)){
+          //    this.setState( {command: [...this.state.command, commandObject] });
+          //  }
         }
 
         this.term.textarea.value ="";
 
+        //this.term.writeln("echo !!");
+        // setTimeout(() => this.term._sendData("echo !!\r", 100));
+        // setTimeout(() => {
+        //   comm = this.term._getCommand();
+        //   console.log("Command in ReactXterm of ", comm);
+        //   command  = parser.checkCommand(comm);
+          
+        //   console.log('Checkcommand returned', command);
+
+        //   if(command){
+            
+        //     let commandObject = { command: command,
+        //     typed: parser.repeat().join("") };
+
+        //     console.log("Command obj putitng into state", commandObject);
+            
+        //     if(!this.state.command.includes(commandObject)){
+             
+        //       this.setState( { command: [...this.state.command, commandObject] } );
+        //     }
+            
+        //   }
+        //   parser.clear();
+        // }, 500);
         
+        
+      }
       if(this.state.userID === ''){
         this._getUserId();
       }
       
+      //console.log("Command after checkBuffer",command);
      
     });
 
@@ -243,7 +281,7 @@ class ReactTerminal extends React.Component {
     }
     
     let levels = this.state.levels.map(elem => {
-      if (elem.number === levelSelected)
+      if (elem.number == levelSelected)
           elem.selected = true;
       else
           elem.selected = false;
@@ -260,7 +298,7 @@ class ReactTerminal extends React.Component {
 
   handleSRS = (questionsArray) => {
 
-    if(questionsArray.length === 0){
+    if(questionsArray.length == 0){
       console.log("No questions due found")
       this.setState({prompt:"No questions due for review"},() => {setTimeout(() => this.setState({prompt:"prompt"}), 2000)})
       
@@ -275,7 +313,7 @@ class ReactTerminal extends React.Component {
     //sets the top prompt to be whatever the next question in this.state.questions is
     let questions = this.state.questions;
     
-    if(this.state.questions.length === 0){
+    if(this.state.questions.length == 0){
       return;
     }
     //console.log("Next question",this.state.nextQuestion," and ",questions.length)
@@ -285,7 +323,7 @@ class ReactTerminal extends React.Component {
 
       let currentLevel = this.state.questions[0].level;
       let levels = this.state.levels.map(elem =>{
-        if(elem.number === currentLevel)
+        if(elem.number == currentLevel)
           elem.finished = true;
 
         return elem;
@@ -412,8 +450,8 @@ class ReactTerminal extends React.Component {
   
     fetch(`http://${HOST}/userid`, {headers:myHeaders}).then( response => {
     return response.json() }).then (text =>  {
-              
-              this.setState({userID:text.userId });
+    
+              this.setState({userID:text.userID });
               
     });
   }

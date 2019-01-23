@@ -39,24 +39,7 @@ function attach(term, socket, bidirectional, buffered, callback) {
     if (buffered) {
       term._pushToBuffer(str || ev.data);
     } else {
-      //this is where to monkey with term writes
-      //in particular by checking for the echo pattern and somehow sending command to ReactXterm
-      //like maybe through a callback term.attach(socket, callback)
-      
-      // let tokens = ev.data.split(" ");
-      // let comp = [];
-      // for(let i = 0; i < tokens.length; i++){
-      //   if(tokens[i].indexOf("echo") > -1 ){
-      //     comp = tokens[i+1];
-      //   }
-      // }
-      // if(comp){
-      //   if(comp.indexOf("\r")> -1){
-      //     comp = comp.split("\r")[0];
-      //     console.log("Parsed commands to",comp);
-      //     command = comp;
-      //   }
-      // }
+
       
       term.write(str || ev.data);
     }

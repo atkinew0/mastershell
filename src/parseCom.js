@@ -24,7 +24,7 @@ module.exports = {
         console.log("Got tokens of ",tokens," in check");
 
         //returns the first matching linux command in tokens array
-        for(let i =0; i < tokens.length; i++){
+        for(let i = 0; i < tokens.length; i++){
             if (this.commands[tokens[i]]){
                 return tokens[i];
             }

@@ -82,7 +82,3 @@ stripFlags(command){
 }
 
 }
-
-
-
-console.log(module.exports.checkSame("cd ~","cd g"))
