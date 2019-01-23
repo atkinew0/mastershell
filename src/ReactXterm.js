@@ -186,6 +186,7 @@ class ReactTerminal extends React.Component {
         
       }
       if(this.state.userID === ''){
+        console.log("Running getuserId");
         this._getUserId();
       }
       
@@ -450,8 +451,8 @@ class ReactTerminal extends React.Component {
   
     fetch(`http://${HOST}/userid`, {headers:myHeaders}).then( response => {
     return response.json() }).then (text =>  {
-    
-              this.setState({userID:text.userID });
+              console.log("_getUserId Got from server",text)
+              this.setState({userID:text.userId });
               
     });
   }
