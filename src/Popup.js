@@ -17,12 +17,14 @@ const style = {
 const selectStyle = {
     margin: '10px',
     padding: '10px',
-    fontSize: '16px'
+    fontSize: '16px',
+    width:'80%'
 }
 
 const inputStyle = {
     padding:"5px",
-    fontSize: '16px'
+    fontSize: '16px',
+    width:'80%'
 }
 
 
