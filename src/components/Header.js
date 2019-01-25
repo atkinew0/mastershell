@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Link} from 'react-router-dom'
+import {Link} from 'react-router-dom';
 import { connect } from 'react-redux';
 import './HeaderStyle.css'
 
@@ -17,7 +17,7 @@ class Header extends Component {
             return (
                 <div>
                      <Link to="/signup"><button>Signup</button></Link>
-                     <Link to="/signin"><button>Sign In</button></Link>
+                     <Link to="/"><button>Sign In</button></Link>
                 </div>
             )
         }

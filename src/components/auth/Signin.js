@@ -1,8 +1,22 @@
 import React, {Component} from 'react';
 import { reduxForm, Field} from 'redux-form';
 import { compose } from 'redux';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
+import terminal from '../../assets/terminal.ico';
+
+const buttonStyle = {
+  display:"block",
+  width:"100%"
+}
+
+const nStyle = {
+
+  margin: "50px",
+  display: "flex"
+
+}
 
 class Signin extends Component{
 
@@ -17,8 +31,10 @@ class Signin extends Component{
         
 
         const { handleSubmit } = this.props;
-
+      
         return (
+          <div style={this.props.SigninStyle}>
+            <img src={terminal} />
             <form onSubmit={handleSubmit(this.onSubmit)}>
               <fieldset>
                 <label>Email</label>
@@ -39,9 +55,17 @@ class Signin extends Component{
                 />
               </fieldset>
               <div>{this.props.errorMessage}</div>
-              <button>Sign In!</button>
+              <button style={buttonStyle}>Sign In!</button>
             </form>
+
+
+            <div style={nStyle}>
+              <p>New User?  </p><Link to="/signup"><button>Sign Up</button></Link>
+            </div>
+
+            </div>
           );
+          
         }
       
 

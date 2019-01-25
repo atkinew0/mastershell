@@ -36,6 +36,7 @@ export const signin = ({email, password}, callback) => async dispatch => {
     callback();
     }
     catch(e){
+        console.log("error in signin action creator",e)
         dispatch({type:AUTH_ERROR, payload: "Invalid Login Credentials"})
     }
 };

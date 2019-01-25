@@ -26,7 +26,7 @@ export default class Command extends React.Component {
     renderPop(){
         
         if(this.state.renderPop){
-            return <Popup close ={this.onClose} data={this.props.data} />
+            return <Popup userID={this.props.userID} close ={this.onClose} data={this.props.data} />
         }
     }
     

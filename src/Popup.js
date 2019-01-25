@@ -1,6 +1,6 @@
 import React from 'react';
 
-const PORT = '3001';
+const PORT = '8081';
 const HOST = `127.0.0.1:${ PORT }`;
 
 const style = {
@@ -56,8 +56,7 @@ export default class Popup extends React.Component {
 
     onSubmit = () => {
 
-        let d = new Date();
-        let due = d.getTime();    //as of right now we want to schedule new questions immediately
+        let due = new Date().getTime();    //as of right now we want to schedule new questions immediately
         //let due = d.getTime() + 86400000;  //adds exact number of ms in 1 day, wrong on DTS but ok
         
         console.log("Due is",due)
@@ -69,7 +68,8 @@ export default class Popup extends React.Component {
             answered:false,
             due:due,
             daysTillDue:0,
-            repetitions:0
+            repetitions:0,
+            uid:this.props.userID
         }
 
         const theReq = `http://${ HOST }/api/srs`;

@@ -63,7 +63,7 @@ class WordBox extends React.Component {
         if(!this.props.words) return <p>loading</p>;
 
         return this.props.words.map(elem => {
-            return <Command key={this.index++} data={elem}/>;
+            return <Command userID={this.props.userID} key={this.index++} data={elem}/>;
         })
     }
 

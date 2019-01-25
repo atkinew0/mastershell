@@ -4,6 +4,10 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
 
+const formStyle = {
+  marginTop:"50px"
+}
+
 class Signup extends Component{
 
     onSubmit = (formProps) => {
@@ -19,7 +23,24 @@ class Signup extends Component{
         const { handleSubmit } = this.props;
 
         return (
+          <div style={formStyle}>
             <form onSubmit={handleSubmit(this.onSubmit)}>
+              <fieldset>
+              <label>First Name</label>
+                <Field
+                  name="firstname"
+                  type="text"
+                  component="input"
+                  autoComplete="none"
+                />
+              <label>Last Name</label>
+                <Field
+                  name="lastname"
+                  type="text"
+                  component="input"
+                  autoComplete="none"
+                />
+              </fieldset>
               <fieldset>
                 <label>Email</label>
                 <Field
@@ -37,10 +58,11 @@ class Signup extends Component{
                   component="input"
                   autoComplete="none"
                 />
-              </fieldset>
+                </fieldset>
               <div>{this.props.errorMessage}</div>
               <button>Sign Up!</button>
             </form>
+            </div>
           );
         }
       
