@@ -1,7 +1,9 @@
 import React from 'react';
 
 const PORT = '8081';
-const HOST = `127.0.0.1:${ PORT }`;
+
+const HOST = "mv2-dev.us-east-1.elasticbeanstalk.com"
+
 
 const style = {
     border: '2px black solid',
@@ -74,7 +76,7 @@ export default class Popup extends React.Component {
             uid:this.props.userID
         }
 
-        const theReq = `http://${ HOST }/api/srs`;
+        const theReq = `http://${ HOST }:${PORT}/api/srs`;
 
         fetch(theReq, {
             body: JSON.stringify(theBody), // data can be `string` or {object}!

@@ -1,6 +1,6 @@
 import React from 'react';
 
-//const PORT = '3001';
+const PORT = '8081';
 //const HOST = `127.0.0.1:${ PORT }`;
 const HOST = "mv2-dev.us-east-1.elasticbeanstalk.com";
 
@@ -41,7 +41,7 @@ export default class ControlBox extends React.Component {
         
         if(levelClicked <= nextLevel){
 
-            const theReq = `http://${ HOST }/api/level/${levelClicked}`;
+            const theReq = `http://${ HOST }:${PORT}/api/level/${levelClicked}`;
 
             fetch(theReq, { method:'GET'}).then( res => {
                 if(!res.ok) console.log(res.status);
@@ -91,7 +91,9 @@ export default class ControlBox extends React.Component {
 
     render(){
         return (
-            <div style={style}><div style={ titleStyle }>Levels</div>
+            <div style={style}>
+            <div style={ titleStyle }>Levels</div>
+            
             <span>Score:{this.props.score}</span>
             <ul style={{width:'80%',margin:'auto',paddingInlineStart:"0"}}>
             {this.renderWords()}

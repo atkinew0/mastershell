@@ -9,9 +9,8 @@ const style = {
     border:"black solid 2px"
 }
 
-//const PORT = '3001';
-//const HOST = `mv2-dev.us-east-1.elasticbeanstalk.com`;
-const HOST = "localhost:8081";
+const PORT = '8081';
+const HOST = "mv2-dev.us-east-1.elasticbeanstalk.com"
 
 const titleStyle ={
     border:'2px solid black',
@@ -36,7 +35,7 @@ class WordBox extends React.Component {
         myHeaders.append('Authorization',localStorage.getItem('token'));
         console.log("My props now",this.props)
         
-        const theRequest = `http://${HOST}/api/srs/?uid=${this.props.userID}`;
+        const theRequest = `http://${HOST}:${PORT}/api/srs/?uid=${this.props.userID}`;
 
         fetch(theRequest,{ method:'GET', headers:myHeaders}).then( response => {
 
