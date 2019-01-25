@@ -18,9 +18,6 @@ import * as winptyCompat from 'xterm/lib/addons/winptyCompat/winptyCompat';
 import * as actions from './actions';
 
 
-import { runInThisContext } from 'vm';
-import { puts } from 'util';
-
 var parser = require('./parseCom')
 parser.init();
 
@@ -139,7 +136,7 @@ class ReactTerminal extends React.Component {
         }
 
         command = parser.check(this.term.textarea.value);
-        console.log("!Checking textarea",this.term.textarea.value)
+        console.log("Checking textarea",this.term.textarea.value)
         console.log("Command returned as legit linux comand",command);
         
 
@@ -186,7 +183,7 @@ class ReactTerminal extends React.Component {
         
       }
       if(this.state.userID === ''){
-        console.log("Running getuserId");
+      
         this._getUserId();
       }
       
@@ -378,7 +375,6 @@ class ReactTerminal extends React.Component {
 
   updateDue(question, correct, uid){
 
-    console.log("Question we are about to update",question)
     
     let dueObj = TimeDue.update(question,correct);
     let repetitions = correct ? question.repetitions + 1 : 0;
@@ -451,7 +447,6 @@ class ReactTerminal extends React.Component {
   
     fetch(`http://${HOST}/userid`, {headers:myHeaders}).then( response => {
     return response.json() }).then (text =>  {
-              console.log("_getUserId Got from server",text)
               this.setState({userID:text.userId });
               
     });
@@ -523,8 +518,7 @@ class ReactTerminal extends React.Component {
         res.text().then(processId => {
           this.pid = processId;
           this.socket = new WebSocket(SOCKET_URL + processId);
-          console.log("The socket at",SOCKET_URL+processId);
-          console.log("Socket",this.socket);
+          
           
           this.socket.onopen = () => {
             this.term.attach(this.socket, true , false, (comp) => { console.log("Callback" ,comp)} );
@@ -568,7 +562,6 @@ class ReactTerminal extends React.Component {
 _makeCommand(command){
   //if command is new command make a new entry for that, otherwise update its typed array to hold its exact
   //input ie ls, ls-al, ls /temp etc etc...
-  console.log("Command true so update",command);
 
   let typed = this.term.textarea.value;
 
