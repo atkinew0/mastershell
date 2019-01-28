@@ -36,8 +36,6 @@ export default class ControlBox extends React.Component {
                 nextLevel = level.number + 1;
             }
         })
-
-        console.log("Nextlevel is", nextLevel)
         
         if(levelClicked <= nextLevel){
 
@@ -50,7 +48,7 @@ export default class ControlBox extends React.Component {
                 if(!res.ok) console.log(res.status);
 
                 res.text().then(resText => {
-                    console.log(resText);
+                    
                     let resjson = JSON.parse(resText);
                     this.props.questionsCall(resjson);
                 });
