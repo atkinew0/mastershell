@@ -8,6 +8,14 @@ const formStyle = {
   marginTop:"50px"
 }
 
+const instructionStyle = {
+  width:"50%",
+  border: "black solid 2px",
+  margin: "auto",
+  marginBottom: "50px",
+  padding:"50px"
+}
+
 class Signup extends Component{
 
     onSubmit = (formProps) => {
@@ -24,6 +32,12 @@ class Signup extends Component{
 
         return (
           <div style={formStyle}>
+          <div style={instructionStyle}>
+          <p>Instructions: To progress through levels mode begin by clicking on a level on the right
+            side of the terminal and follow the prompt. To save a command to your spaced repetition collection click on the command on
+            the left side of the terminal and add a prompt. To review your previously saved commands click the review button in the bottom left.
+          </p>
+          </div>
             <form onSubmit={handleSubmit(this.onSubmit)}>
               <fieldset>
               <label>First Name</label>
