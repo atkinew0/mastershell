@@ -32,7 +32,7 @@ Terminal.applyAddon(winptyCompat);
 const PORT = '8081';
 //const HOST = `127.0.0.1:${ PORT }`;
 const HOST = "mv2-dev.us-east-1.elasticbeanstalk.com"
-const SOCKET_URL = `ws://${ HOST }:${PORT}/terminals/`;
+const SOCKET_URL = `ws://${ HOST }/terminals/`;
 
 const containerStyle ={
   position: 'absolute',
@@ -388,7 +388,7 @@ class ReactTerminal extends React.Component {
       uid:uid
     }
 
-    let theReq = `http://${HOST}:${PORT}/api/srs`;
+    let theReq = `http://${HOST}/api/srs`;
 
     fetch(theReq, {
       body: JSON.stringify(theBody), // data can be `string` or {object}!
@@ -445,7 +445,7 @@ class ReactTerminal extends React.Component {
     const myHeaders = new Headers();
     myHeaders.append('Authorization',localStorage.getItem('token'));
   
-    fetch(`http://${HOST}:${PORT}/userid`, {headers:myHeaders}).then( response => {
+    fetch(`http://${HOST}/userid`, {headers:myHeaders}).then( response => {
     return response.json() }).then (text =>  {
               this.setState({userID:text.userId });
               
@@ -493,7 +493,7 @@ class ReactTerminal extends React.Component {
 
   _connectToServer() {
 
-    const theReq = `http://${ HOST }:${PORT}/terminals/?cols=${ this.term.cols }&rows=${ this.term.rows }`;
+    const theReq = `http://${ HOST }/terminals/?cols=${ this.term.cols }&rows=${ this.term.rows }`;
     const myHeaders = new Headers();
     myHeaders.append('Authorization',localStorage.getItem('token'))
 

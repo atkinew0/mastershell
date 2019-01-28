@@ -2,10 +2,11 @@ import { AUTH_USER, AUTH_ERROR, WEBSOCKET } from './types';
 import axios from 'axios';
 const HOST = "mv2-dev.us-east-1.elasticbeanstalk.com"
 const PORT = 8081;
+//const HOST = '127.0.0.1'
 
 export const signup = ({email, password}, callback) => async dispatch => {
     try{
-    const response = await axios.post(`http://${HOST}:${PORT}/signup`, { email, password})
+    const response = await axios.post(`http://${HOST}/signup`, { email, password})
     
 
     dispatch({ type: AUTH_USER, payload: response.data.token } ); 
@@ -28,7 +29,7 @@ export const signout = () => {
 
 export const signin = ({email, password}, callback) => async dispatch => {
     try{
-    const response = await axios.post(`http://${HOST}:${PORT}/signin`, { email, password})
+    const response = await axios.post(`http://${HOST}/signin`, { email, password})
     
 
     dispatch({ type: AUTH_USER, payload: response.data.token } );

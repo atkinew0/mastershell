@@ -1,8 +1,8 @@
 import React from 'react';
 
 const PORT = '8081';
-//const HOST = `127.0.0.1:${ PORT }`;
-const HOST = "mv2-dev.us-east-1.elasticbeanstalk.com";
+const HOST = `127.0.0.1:${PORT}`;
+//const HOST = "mv2-dev.us-east-1.elasticbeanstalk.com";
 
 const style = {
     float:'left',
@@ -41,9 +41,12 @@ export default class ControlBox extends React.Component {
         
         if(levelClicked <= nextLevel){
 
-            const theReq = `http://${ HOST }:${PORT}/api/level/${levelClicked}`;
+            const theReq = `http://${ HOST }/api/level/${levelClicked}`;
+            const myHeaders = new Headers();
+            myHeaders.append('Authorization',localStorage.getItem('token'))
 
-            fetch(theReq, { method:'GET'}).then( res => {
+
+            fetch(theReq, { method:'GET', headers:myHeaders }).then( res => {
                 if(!res.ok) console.log(res.status);
 
                 res.text().then(resText => {

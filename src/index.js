@@ -15,7 +15,6 @@ import Signin from './components/auth/Signin';
 import ReactXterm from './ReactXterm';
 
 import './index.css';
-import * as serviceWorker from './serviceWorker';
 
 // ReactDOM.render(<App />, document.getElementById('root'));
 
@@ -38,5 +37,3 @@ ReactDOM.render(
     </App>
     </BrowserRouter>
 </Provider>, document.getElementById("root"));
-
-serviceWorker.unregister();
