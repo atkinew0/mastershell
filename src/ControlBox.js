@@ -1,8 +1,8 @@
 import React from 'react';
 
 const PORT = '8081';
-const HOST = `127.0.0.1:${PORT}`;
-//const HOST = "mv2-dev.us-east-1.elasticbeanstalk.com";
+//const HOST = `127.0.0.1:${PORT}`;
+const HOST = "mv2-dev.us-east-1.elasticbeanstalk.com";
 
 const style = {
     float:'left',
