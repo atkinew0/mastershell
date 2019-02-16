@@ -5,12 +5,11 @@ const style = {
     float:'left',
     position:'relative',
     width:"200px",
-    height:"800px",
+    height:"680px",
     border:"black solid 2px"
 }
 
-const PORT = '8081';
-const HOST = "mv2-dev.us-east-1.elasticbeanstalk.com"
+const HOST = process.env.REACT_APP_BACKEND || "mv2-dev.us-east-1.elasticbeanstalk.com";
 
 const titleStyle ={
     border:'2px solid black',

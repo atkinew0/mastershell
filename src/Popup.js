@@ -1,8 +1,8 @@
 import React from 'react';
 
-const PORT = '8081';
+//const PORT = '8081';
 
-const HOST = "mv2-dev.us-east-1.elasticbeanstalk.com"
+const HOST = process.env.REACT_APP_BACKEND || "mv2-dev.us-east-1.elasticbeanstalk.com";
 
 
 const style = {

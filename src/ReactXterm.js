@@ -29,9 +29,7 @@ Terminal.applyAddon(fullscreen);
 Terminal.applyAddon(search);
 Terminal.applyAddon(winptyCompat);
 
-const PORT = '8081';
-//const HOST = `127.0.0.1:${ PORT }`;
-const HOST = "mv2-dev.us-east-1.elasticbeanstalk.com"
+const HOST = process.env.REACT_APP_BACKEND || "mv2-dev.us-east-1.elasticbeanstalk.com";
 const SOCKET_URL = `ws://${ HOST }/terminals/`;
 
 const containerStyle ={
@@ -39,7 +37,7 @@ const containerStyle ={
     top: '50%',
     left: '50%',
     marginRight: '-50%',
-    marginTop: '60px',
+    marginTop: '15px',
     transform: 'translate(-50%, -50%)'
 }
 
@@ -84,9 +82,11 @@ class ReactTerminal extends React.Component {
   componentDidMount() {
     this.term = new Terminal({
       cursorBlink: true,
-      rows: 44,
+      rows: 36,
       fontSize: this.fontSize
     });
+
+    console.log("On didmount local host",process.env)
 
     this.term.open(document.getElementById('terminal-container'));
     this.term.winptyCompatInit();
@@ -483,7 +483,6 @@ class ReactTerminal extends React.Component {
          questionsCall={this.handleQuestions} 
          words={this.state.levels}/>
 
-         <p>BETA: 'hint' for a hint or 'next' to skip question</p>
     </div>
     )
   }

@@ -34,7 +34,7 @@ class Signin extends Component{
       
         return (
           <div style={this.props.SigninStyle}>
-            <img src={terminal} />
+            <img alt="terminal" src={terminal} />
             <form onSubmit={handleSubmit(this.onSubmit)}>
               <fieldset>
                 <label>Email</label>

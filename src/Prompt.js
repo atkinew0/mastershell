@@ -8,7 +8,8 @@ let spanStyle = {
     fontFamily: 'courier-new, courier, monospace',
     fontSize: '18px',
     overflowWrap:'break-word',
-    overflow:'hidden'
+    overflow:'hidden',
+    margin:'0'
 }
 
 let innerStyle = {

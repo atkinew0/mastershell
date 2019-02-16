@@ -26,7 +26,8 @@ class Header extends Component {
 
     render(){
         return (
-        <div className="header">
+        <div style={{'textAlign':'center'}} className="header">
+            <p >BETA: 'hint' for a hint or 'next' to skip question</p>
             {this.renderLinks()}
         </div>
         )

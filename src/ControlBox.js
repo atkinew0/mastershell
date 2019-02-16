@@ -1,13 +1,11 @@
 import React from 'react';
 
-const PORT = '8081';
-//const HOST = `127.0.0.1:${PORT}`;
-const HOST = "mv2-dev.us-east-1.elasticbeanstalk.com";
+const HOST = process.env.REACT_APP_BACKEND || "mv2-dev.us-east-1.elasticbeanstalk.com";
 
 const style = {
     float:'left',
     width:"200px",
-    height:"800px",
+    height:"680px",
     border:"black solid 2px"
 }
 
@@ -28,6 +26,8 @@ export default class ControlBox extends React.Component {
         //when you click on Level x load in questions for that level
         //if the user has completed previous levels
         let levelClicked = event.target.value;
+
+        console.log("The host in env vars is",process.env,process.env.REACT_APP_BACKEND)
 
         let nextLevel = 1;
 
