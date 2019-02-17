@@ -19,7 +19,8 @@ let titleStyle={
 export default (props) => {
     return (
         <div style={contStyle}>
-        <h3 style={titleStyle}>Mastershell Bash command line trainer</h3>
+        <h1 style={titleStyle}>Mastershell</h1>
+        <h3 style={titleStyle}>Bash Command Line Trainer</h3>
         <Signin history={props.history} SigninStyle={SigninStyle} />
         </div>
 

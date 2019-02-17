@@ -5,7 +5,9 @@ import { connect } from 'react-redux';
 import * as actions from '../../actions';
 
 const formStyle = {
-  marginTop:"50px"
+  marginTop:"50px",
+  width:'50%',
+  margin:'auto'
 }
 
 const instructionStyle = {
@@ -38,17 +40,18 @@ class Signup extends Component{
             the left side of the terminal and add a prompt. To review your previously saved commands click the review button in the bottom left.
           </p>
           </div>
-            <form onSubmit={handleSubmit(this.onSubmit)}>
+          
+            <form className="ui large form" onSubmit={handleSubmit(this.onSubmit)}>
               <fieldset>
               <label>First Name</label>
-                <Field
+                <Field className="ui field"
                   name="firstname"
                   type="text"
                   component="input"
                   autoComplete="none"
                 />
               <label>Last Name</label>
-                <Field
+                <Field className="ui field"
                   name="lastname"
                   type="text"
                   component="input"
@@ -57,7 +60,7 @@ class Signup extends Component{
               </fieldset>
               <fieldset>
                 <label>Email</label>
-                <Field
+                <Field className="ui field"
                   name="email"
                   type="text"
                   component="input"
@@ -66,7 +69,7 @@ class Signup extends Component{
               </fieldset>
               <fieldset>
                 <label>Password</label>
-                <Field
+                <Field className="ui field"
                   name="password"
                   type="password"
                   component="input"
@@ -77,6 +80,7 @@ class Signup extends Component{
               <button>Sign Up!</button>
             </form>
             </div>
+          
           );
         }
       

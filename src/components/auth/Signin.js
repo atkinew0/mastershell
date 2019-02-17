@@ -18,6 +18,17 @@ const nStyle = {
 
 }
 
+const formStyle = {
+  width:'30%',
+  margin:'auto'
+}
+
+const imgStyle = {
+  width:'20%',
+  height:'20%',
+  margin:'auto'
+}
+
 class Signin extends Component{
 
     onSubmit = (formProps) => {
@@ -33,9 +44,11 @@ class Signin extends Component{
         const { handleSubmit } = this.props;
       
         return (
-          <div style={this.props.SigninStyle}>
-            <img alt="terminal" src={terminal} />
-            <form onSubmit={handleSubmit(this.onSubmit)}>
+          <>
+          <img alt="terminal" style={imgStyle} src={terminal} />
+          <div className="ui stacked segment" style={formStyle} style={this.props.SigninStyle}>
+            
+            <form className="ui large form"  onSubmit={handleSubmit(this.onSubmit)}>
               <fieldset>
                 <label>Email</label>
                 <Field
@@ -60,10 +73,12 @@ class Signin extends Component{
 
 
             <div style={nStyle}>
-              <p>New User?  </p><Link to="/signup"><button>Sign Up</button></Link>
+              <div>New User?  </div>
+              <Link to="/signup"><button>Sign Up</button></Link>
             </div>
 
             </div>
+            </>
           );
           
         }

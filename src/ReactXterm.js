@@ -38,7 +38,8 @@ const containerStyle ={
     left: '50%',
     marginRight: '-50%',
     marginTop: '15px',
-    transform: 'translate(-50%, -50%)'
+    transform: 'translate(-50%, -50%)',
+    textAlign:'center'
 }
 
 //todo refactor levels elsewhere to not clutter reactxterm
@@ -521,7 +522,7 @@ class ReactTerminal extends React.Component {
           
           this.socket.onopen = () => {
             this.term.attach(this.socket, true , false, (comp) => { console.log("Callback" ,comp)} );
-            this.term.writeln("Welcome to the beginning of mastershell");
+            this.term.writeln("Beginning mastershell...");
 
             //Note Redux action creator to allow the signout component access to close websocket
             this.props.websocket(this.socket);
