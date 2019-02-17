@@ -138,7 +138,6 @@ class ReactTerminal extends React.Component {
 
         command = parser.check(this.term.textarea.value);
         console.log("Checking textarea",this.term.textarea.value)
-        console.log("Command returned as legit linux comand",command);
         
 
         if(command){
@@ -205,7 +204,8 @@ class ReactTerminal extends React.Component {
     // listenToWindowResize(() => {
     //   this.term.fit();
     // });
-    this.term.fit();
+
+    //this.term.fit();
 
     // this.term._core.register(this.term.addDisposableListener('key', (key, ev) => {
     //   const printable = !ev.altKey && !ev.altGraphKey && !ev.ctrlKey && !ev.metaKey;
