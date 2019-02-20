@@ -87,7 +87,6 @@ class ReactTerminal extends React.Component {
       fontSize: this.fontSize
     });
 
-    console.log("On didmount local host",process.env)
 
     this.term.open(document.getElementById('terminal-container'));
     this.term.winptyCompatInit();
@@ -141,55 +140,20 @@ class ReactTerminal extends React.Component {
         
 
         if(command){
-
           this._makeCommand(command);
-          // console.log("Command true so update",command)
-          // let commandObject = { 
-          //                       command: command,
-          //                       typed: this.term.textarea.value       };
-
-          //  if(!this.state.command.includes(commandObject)){
-          //    this.setState( {command: [...this.state.command, commandObject] });
-          //  }
         }
 
         this.term.textarea.value ="";
-
-        //this.term.writeln("echo !!");
-        // setTimeout(() => this.term._sendData("echo !!\r", 100));
-        // setTimeout(() => {
-        //   comm = this.term._getCommand();
-        //   console.log("Command in ReactXterm of ", comm);
-        //   command  = parser.checkCommand(comm);
-          
-        //   console.log('Checkcommand returned', command);
-
-        //   if(command){
-            
-        //     let commandObject = { command: command,
-        //     typed: parser.repeat().join("") };
-
-        //     console.log("Command obj putitng into state", commandObject);
-            
-        //     if(!this.state.command.includes(commandObject)){
-             
-        //       this.setState( { command: [...this.state.command, commandObject] } );
-        //     }
-            
-        //   }
-        //   parser.clear();
-        // }, 500);
-        
         
       }
-      if(this.state.userID === ''){
-      
-        this._getUserId();
-      }
-      
-      //console.log("Command after checkBuffer",command);
      
     });
+
+    if(this.state.userID === ''){
+      
+      this._getUserId();
+    }
+
 
     this.term.decreaseFontSize = () => {
       this.term.setOption('fontSize', --this.fontSize);
@@ -201,61 +165,9 @@ class ReactTerminal extends React.Component {
     };
     this._connectToServer();
 
-    // listenToWindowResize(() => {
-    //   this.term.fit();
-    // });
-
-    //this.term.fit();
-
-    // this.term._core.register(this.term.addDisposableListener('key', (key, ev) => {
-    //   const printable = !ev.altKey && !ev.altGraphKey && !ev.ctrlKey && !ev.metaKey;
-  
-    //   if (ev.keyCode === 13) {
-    //     this.term.prompt();
-    //   } else if (ev.keyCode === 8) {
-    //    // Do not delete the prompt
-    //     if (this.term.x > 2) {
-    //       this.term.write('\b \b');
-    //     }
-    //   } else if (printable) {
-    //     this.term.write(key);
-    //   }
-    // }));
-  
-    // this.term._core.register(this.term.addDisposableListener('paste', (data, ev) => {
-    //   this.term.write(data);
-    // }));
-    // this.term.on('key',function(key){
-    //   console.log("Term got a key event");
-    //   this.term.write(key);
-    // })
-
-    // this.term.textarea.onkeydown = e => {
-    //   console.log(e.keyCode, e.shiftKey, e.ctrlKey, e.altKey);
-    //   // ctrl + shift + metakey + +
-    //   if ((e.keyCode === 187 || e.keyCode === 61) && e.shiftKey && e.ctrlKey && e.altKey) {
-    //     this.term.setOption('fontSize', ++this.fontSize);
-    //     this.term.fit();
-    //   }
-    //   // ctrl + shift + metakey + -
-    //   if ((e.keyCode === 189 || e.keyCode === 173) && e.shiftKey && e.ctrlKey && e.altKey) {
-    //     this.term.setOption('fontSize', --this.fontSize);
-    //     this.term.fit();
-    //   }
-    //   // ctrl + shift + metakey + v
-    //   if (e.keyCode === 86 && e.shiftKey && e.ctrlKey && e.altKey) {
-    //     this.props.options.splitVertical && this.props.options.splitVertical();
-    //   }
-    //   // ctrl + shift + metakey + h
-    //   if (e.keyCode === 72 && e.shiftKey && e.ctrlKey && e.altKey) {
-    //     this.props.options.splitHorizontal && this.props.options.splitHorizontal();
-    //   }
-    //   // ctrl + shift + metakey + w
-    //   if (e.keyCode === 87 && e.shiftKey && e.ctrlKey && e.altKey) {
-    //     this.props.options.close && this.props.options.close();
-    //   }
-    // };
   }
+
+
   componentWillUnmount() {
     clearTimeout(this.interval);
   }
@@ -442,6 +354,7 @@ class ReactTerminal extends React.Component {
   }
 
   _getUserId(){
+    //query backend auth server passing in JWT Token to get back a user ID
 
     const myHeaders = new Headers();
     myHeaders.append('Authorization',localStorage.getItem('token'));
@@ -449,7 +362,6 @@ class ReactTerminal extends React.Component {
     fetch(`http://${HOST}/userid`, {headers:myHeaders}).then( response => {
     return response.json() }).then (text =>  {
               this.setState({userID:text.userId });
-              
     });
   }
  

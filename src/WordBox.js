@@ -1,5 +1,7 @@
 import React from 'react';
+
 import Command from './Command';
+import EditCommands from './EditCommands';
 
 const style = {
     float:'left',
@@ -20,7 +22,10 @@ class WordBox extends React.Component {
     constructor(props){
         super(props);
 
-        
+        this.state = {
+            showEdit:false
+        }
+
         this.index = 0;
     }
 
@@ -38,22 +43,63 @@ class WordBox extends React.Component {
 
         fetch(theRequest,{ method:'GET', headers:myHeaders}).then( response => {
 
-            response.text().then( resText => {
+            response.text().then( (resText, err) => {
+                if(err)
+                    console.log(err)
+
                 console.log(resText);
                 let resJSON = JSON.parse(resText)
                 this.props.questionsCall(resJSON);
             })
         })
-
-
-
     }
+
+    handleClick2 = () => {
+
+        this.setState({showEdit:this.state.showEdit? false : true})
+    }
+
+
     renderButton(){
         if(this.props.mode === "srs"){
-            return <p onClick={this.props.stopReview}>Stop Reviewing </p>
+            return (
+                 <div style={{position:'absolute',bottom:'0', border:'2px solid black',background:'rgb(231, 228, 228)'}}>
+                    <span>{this.props.completed.done}/{this.props.completed.total}</span>
+                    <p onClick={this.props.stopReview}>Review My Commands</p>
+                 </div>
+                )
         }else{
-            return <p onClick={this.handleClick}>Review Commands</p>
+            return (
+                <div style={{ border:'2px solid black',background:'rgb(231, 228, 228)'}}>
+                    
+                    <p onClick={this.handleClick}>Review My Commands</p>
+                 </div>
+            )
+            
         }
+    }
+
+    renderButton2(){
+        return (
+            
+            <div style={{border:'2px solid black',background:'rgb(231, 228, 228)'}}>
+                
+                <p onClick={this.handleClick2}>Edit Commands</p>
+            </div>
+            
+            )
+    }
+
+    renderEdit(){
+
+        if(this.state.showEdit){
+            return (
+                <div>
+                    <EditCommands userID={this.props.userID} close={this.handleClick2}/>
+                </div>
+            )
+        }
+        
     }
     
     renderWords(){
@@ -69,13 +115,14 @@ class WordBox extends React.Component {
         
         return (
             <div style={style}><div style={ titleStyle }>Commands</div>
-            <ul style={{width:"80%",margin:"auto", paddingInlineStart:"0"}}>
-            {this.renderWords()}
-            </ul >
-            <div style={{position:'absolute',bottom:'0', border:'2px solid black',background:'rgb(231, 228, 228)'}}>
-                <span>{this.props.completed.done}/{this.props.completed.total}</span>
-                {this.renderButton()}
-            </div>
+                <ul style={{width:"80%",margin:"auto", paddingInlineStart:"0"}}>
+                {this.renderWords()}
+                </ul>
+                <div style={{display:'flex',position:'absolute',bottom:'0'}}>
+                    {this.renderButton()}
+                    {this.renderButton2()}
+                </div>
+                    {this.renderEdit()}
             </div>
         );
     }
