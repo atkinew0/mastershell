@@ -27,8 +27,6 @@ export default class ControlBox extends React.Component {
         //if the user has completed previous levels
         let levelClicked = event.target.value;
 
-        console.log("The host in env vars is",process.env,process.env.REACT_APP_BACKEND)
-
         let nextLevel = 1;
 
         this.props.levels.forEach(level => {
@@ -59,6 +57,7 @@ export default class ControlBox extends React.Component {
             this.props.locked();
         }
     }
+
     renderStyle = (elem) => {
 
         let style = { border: 'solid black 2px',

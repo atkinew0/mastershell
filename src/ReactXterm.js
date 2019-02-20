@@ -231,10 +231,12 @@ class ReactTerminal extends React.Component {
     //console.log("Next question",this.state.nextQuestion," and ",questions.length)
 
     if(this.state.nextQuestion >= questions.length && questions.length > 0){
-      this.setState({prompt:"Level Complete!",questions:[],nextQuestion:0, mode:'', levelCompleted: this.state.levelCompleted + 1},()=>{
 
-        //on completing a level update users level in DB
-        this.updateLevelCompleted(this.state.userID, this.state.levelCompleted);
+      let level = this.state.questions[0].level;
+      this.setState({prompt:"Level Complete!",questions:[],nextQuestion:0, mode:''},()=>{
+
+        //on completing a level update users level in both App state and DB
+        this.updateLevelCompleted(this.state.userID, level);
       });
 
       let currentLevel = this.state.questions[0].level;
@@ -325,15 +327,22 @@ class ReactTerminal extends React.Component {
 
   }
 
-  updateLevelCompleted(uid, levelCompleted){
+  updateLevelCompleted(uid, levelJustCompleted){
 
-    const myHeaders = new Headers();
-    myHeaders.append('Authorization',localStorage.getItem('token'));
+    if(this.state.levelCompleted < levelJustCompleted){
 
-    fetch(`http://${HOST}/api/user?uid=${uid}&level=${levelCompleted}`,{method:'POST', headers:myHeaders})
-    .then(response => console.log(response));
+      let newLevel = this.state.levelCompleted + 1;
 
+      this.setState({levelCompleted:newLevel});
 
+      const myHeaders = new Headers();
+      myHeaders.append('Authorization',localStorage.getItem('token'));
+
+      fetch(`http://${HOST}/api/user?uid=${uid}&level=${newLevel}`,{method:'POST', headers:myHeaders})
+      .then(response => console.log(response));
+
+    }
+    
   }
 
   focusTerm =() => {
@@ -373,7 +382,7 @@ class ReactTerminal extends React.Component {
     //1) query backend auth server passing in JWT Token to get back a user ID
     //2) then when we have user ID use that to get user's level completed
     //3) finally set levels finished in the app to the users levelCompleted
-    let uid;
+    let uid, level;
     const myHeaders = new Headers();
     myHeaders.append('Authorization',localStorage.getItem('token'));
   
@@ -389,16 +398,16 @@ class ReactTerminal extends React.Component {
       .then ( response => {
           return response.json()})
       .then( text => {
-          
+          level = text.levelCompleted;
           this.setState({levelCompleted:text.levelCompleted});
       })
       .then( () => {
 
         let levels = this.state.levels.map(elem => {
-          if (elem.number <= this.state.levelCompleted)
-              elem.selected = true;
+          if (elem.number <= level)
+              elem.finished = true;
           else
-              elem.selected = false;
+              elem.finished = false;
           return elem;
         });
 
