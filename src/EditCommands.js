@@ -188,7 +188,7 @@ class EditCommands extends React.Component{
                 <th style={tableI}>ID</th>
                 <th style={tableI}>Command</th>
                 <th style={tableI}>Prompt</th>
-                <th style={tableI}>Due</th>
+                <th style={tableI}>Next Review</th>
                 <th style={tableI}>Delete</th>
             </tr>
                 {this.myCommands()}

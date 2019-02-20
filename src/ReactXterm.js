@@ -75,7 +75,8 @@ class ReactTerminal extends React.Component {
       nextQuestion:0,
       mode:'',
       score:0,
-      userID:''
+      userID:'',
+      levelCompleted:'0'
     };
   }
 
@@ -230,7 +231,11 @@ class ReactTerminal extends React.Component {
     //console.log("Next question",this.state.nextQuestion," and ",questions.length)
 
     if(this.state.nextQuestion >= questions.length && questions.length > 0){
-      this.setState({prompt:"Level Complete!",questions:[],nextQuestion:0, mode:''});
+      this.setState({prompt:"Level Complete!",questions:[],nextQuestion:0, mode:'', levelCompleted: this.state.levelCompleted + 1},()=>{
+
+        //on completing a level update users level in DB
+        this.updateLevelCompleted(this.state.userID, this.state.levelCompleted);
+      });
 
       let currentLevel = this.state.questions[0].level;
       let levels = this.state.levels.map(elem =>{
@@ -320,6 +325,17 @@ class ReactTerminal extends React.Component {
 
   }
 
+  updateLevelCompleted(uid, levelCompleted){
+
+    const myHeaders = new Headers();
+    myHeaders.append('Authorization',localStorage.getItem('token'));
+
+    fetch(`http://${HOST}/api/user?uid=${uid}&level=${levelCompleted}`,{method:'POST', headers:myHeaders})
+    .then(response => console.log(response));
+
+
+  }
+
   focusTerm =() => {
     this.term.focus();
   }
@@ -354,16 +370,45 @@ class ReactTerminal extends React.Component {
   }
 
   _getUserId(){
-    //query backend auth server passing in JWT Token to get back a user ID
-
+    //1) query backend auth server passing in JWT Token to get back a user ID
+    //2) then when we have user ID use that to get user's level completed
+    //3) finally set levels finished in the app to the users levelCompleted
+    let uid;
     const myHeaders = new Headers();
     myHeaders.append('Authorization',localStorage.getItem('token'));
   
-    fetch(`http://${HOST}/userid`, {headers:myHeaders}).then( response => {
-    return response.json() }).then (text =>  {
-              this.setState({userID:text.userId });
-    });
-  }
+    fetch(`http://${HOST}/userid`, {headers:myHeaders})
+    .then( response => {
+             return response.json() })
+    .then (text =>  {
+             uid = text;
+             this.setState({userID:text.userId });})
+    .then ( () => {
+
+      fetch(`http://${HOST}/api/user?uid=${uid.userId}`)
+      .then ( response => {
+          return response.json()})
+      .then( text => {
+          
+          this.setState({levelCompleted:text.levelCompleted});
+      })
+      .then( () => {
+
+        let levels = this.state.levels.map(elem => {
+          if (elem.number <= this.state.levelCompleted)
+              elem.selected = true;
+          else
+              elem.selected = false;
+          return elem;
+        });
+
+        this.setState({levels:levels});
+
+
+      })
+  });
+
+}
  
   render() {
 

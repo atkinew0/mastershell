@@ -60,26 +60,25 @@ class WordBox extends React.Component {
     }
 
 
-    renderButton(){
+    renderReviewButton(){
         if(this.props.mode === "srs"){
             return (
-                 <div style={{position:'absolute',bottom:'0', border:'2px solid black',background:'rgb(231, 228, 228)'}}>
+                 <div onClick={this.props.stopReview} style={{position:'absolute',bottom:'0', border:'2px solid black',background:'rgb(231, 228, 228)'}}>
                     <span>{this.props.completed.done}/{this.props.completed.total}</span>
-                    <p onClick={this.props.stopReview}>Review My Commands</p>
+                    <p >Stop Reviewing</p>
                  </div>
                 )
         }else{
             return (
-                <div style={{ border:'2px solid black',background:'rgb(231, 228, 228)'}}>
-                    
-                    <p onClick={this.handleClick}>Review My Commands</p>
+                <div onClick={this.handleClick} style={{ border:'2px solid black',background:'rgb(231, 228, 228)'}}>
+                    <p >Review My Commands</p>
                  </div>
             )
             
         }
     }
 
-    renderButton2(){
+    renderEditButton(){
         return (
             
             <div style={{border:'2px solid black',background:'rgb(231, 228, 228)'}}>
@@ -119,8 +118,8 @@ class WordBox extends React.Component {
                 {this.renderWords()}
                 </ul>
                 <div style={{display:'flex',position:'absolute',bottom:'0'}}>
-                    {this.renderButton()}
-                    {this.renderButton2()}
+                    {this.renderReviewButton()}
+                    {this.renderEditButton()}
                 </div>
                     {this.renderEdit()}
             </div>

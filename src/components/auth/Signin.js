@@ -8,7 +8,7 @@ import terminal from '../../assets/terminal.ico';
 
 const buttonStyle = {
   display:"block",
-  width:"100%"
+  width:"100%",
 }
 
 const nStyle = {
@@ -46,7 +46,7 @@ class Signin extends Component{
         return (
           <>
           <img alt="terminal" style={imgStyle} src={terminal} />
-          <div className="ui stacked segment" style={formStyle} style={this.props.SigninStyle}>
+          <div className="ui stacked segment" style={this.props.SigninStyle}>
             
             <form className="ui large form"  onSubmit={handleSubmit(this.onSubmit)}>
               <fieldset>
