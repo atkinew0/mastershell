@@ -152,7 +152,7 @@ class ReactTerminal extends React.Component {
 
     if(this.state.userID === ''){
       
-      this._getUserId();
+      this._userInit();
     }
 
 
@@ -164,6 +164,7 @@ class ReactTerminal extends React.Component {
       this.term.setOption('fontSize', ++this.fontSize);
       this.term.fit();
     };
+    
     this._connectToServer();
 
   }
@@ -378,7 +379,7 @@ class ReactTerminal extends React.Component {
     return {done: this.state.nextQuestion, total:this.state.questions.length }
   }
 
-  _getUserId(){
+  _userInit(){
     //1) query backend auth server passing in JWT Token to get back a user ID
     //2) then when we have user ID use that to get user's level completed
     //3) finally set levels finished in the app to the users levelCompleted
@@ -525,41 +526,42 @@ class ReactTerminal extends React.Component {
     }, 2000);
   }
 
-_makeCommand(command){
-  //if command is new command make a new entry for that, otherwise update its typed array to hold its exact
-  //input ie ls, ls-al, ls /temp etc etc...
+  _makeCommand(command) {
+    //if command is new command make a new entry for that, otherwise update its typed array to hold its exact
+    //input ie ls, ls-al, ls /temp etc etc...
 
-  let typed = this.term.textarea.value;
+    let typed = this.term.textarea.value;
 
-  //check if entire command input is a repeat, ie already seen exact entry ls -al
-  let repeat = this.state.command.some( commandObj =>  commandObj.typed === typed );
+    //check if entire command input is a repeat, ie already seen exact entry ls -al
+    let repeat = this.state.command.some(commandObj => commandObj.typed === typed);
 
-  if(!repeat){
+    if (!repeat) {
       let seenCommand = this.state.command.some(commandObj => commandObj.command === command);
 
-      if(!seenCommand){
-          let commandObject = { 
-            command: command,
-            typed: [this.term.textarea.value]     };
+      if (!seenCommand) {
+        let commandObject = {
+          command: command,
+          typed: [this.term.textarea.value]
+        };
 
-            this.setState( {command: [...this.state.command, commandObject] });
+        this.setState({ command: [...this.state.command, commandObject] });
       }
       else {
         let updateCommands = this.state.command;
 
         updateCommands.forEach(commandObj => {
-          if(commandObj.command === command){
+          if (commandObj.command === command) {
             commandObj.typed.push(typed);
           }
         });
 
         // let update = this.state.command.find(commandObj => commandObj.command === command );
         // update.typed.push(typed);
-        this.setState( {command: [...updateCommands] });
+        this.setState({ command: [...updateCommands] });
       }
-  }
+    }
 
-}
+  }
 };
 
 ReactTerminal.propTypes = {
