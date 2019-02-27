@@ -8,7 +8,8 @@ const style = {
     position:'relative',
     width:"200px",
     height:"680px",
-    border:"black solid 2px"
+    border:"black solid 2px",
+    overflow:"scroll"
 }
 
 const HOST = process.env.REACT_APP_BACKEND || "mv2-dev.us-east-1.elasticbeanstalk.com";

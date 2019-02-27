@@ -42,16 +42,11 @@ const containerStyle ={
     textAlign:'center'
 }
 
-//todo refactor levels elsewhere to not clutter reactxterm
-//also poss to get dynamically from DB but seems just as well to hardcode levels for now
 const levels = []
 const MAX_LEVEL = 31
-const MAX_DISPLAY = 23
+const MAX_DISPLAY = 31
 const MAX = Math.min(MAX_DISPLAY, MAX_LEVEL)
 
-for(let i = 0; i < MAX; i++){
-  levels.push({name:`Level ${i+1}`,number:i+1, finished:false, selected:false})
-}
 
 
 class ReactTerminal extends React.Component {
@@ -64,6 +59,12 @@ class ReactTerminal extends React.Component {
     this.failures = 0;
     this.interval = null;
     this.fontSize = 16;
+
+    let levels = []
+
+    for(let i = 1; i <= MAX; i++){
+      levels.push({name:`Level ${i}`,number:i, finished:false, selected:false})
+    }
 
     this.state = {
       lastEntry:"",
@@ -82,6 +83,9 @@ class ReactTerminal extends React.Component {
 
 
   componentDidMount() {
+
+    console.log("Props now are",this.props)
+
     this.term = new Terminal({
       cursorBlink: true,
       rows: 36,
@@ -94,16 +98,14 @@ class ReactTerminal extends React.Component {
     this.term.fit();
     this.term.focus();
     
-    // this.term.on('resize', ({ cols, rows }) => {
-    //   if (!this.pid) return;
-    //   fetch(`http://${ HOST }/terminals/${ this.pid }/size?cols=${ cols }&rows=${ rows }`, { method: 'POST' });
-    // });
+    
     this.term.on('key', (key) => {
       
       let command;
       
 
       if( key.charCodeAt(0) === 127){
+        
         //implement backspace textarea input deletion
         let currentText = this.term.textarea.value;
         
@@ -118,6 +120,7 @@ class ReactTerminal extends React.Component {
 
       if(key.charCodeAt(0) === 13){
         
+        
         if(this.term.textarea.value === "next" && this.state.mode != ""){
           
           this.setState({nextQuestion:this.state.nextQuestion+1}, this.updatePrompt);
@@ -128,7 +131,7 @@ class ReactTerminal extends React.Component {
           
           this.term.write("  "+hint);
           this.setState({score:this.state.score -1});
-          console.log("Hint state", this.state.questions[this.state.nextQuestion].answer)
+         
         }
 
         if(this.state.mode === 'levels' || this.state.mode === 'srs'){
@@ -137,7 +140,7 @@ class ReactTerminal extends React.Component {
         }
 
         command = parser.check(this.term.textarea.value);
-        console.log("Checking textarea",this.term.textarea.value)
+        
         
 
         if(command){
@@ -154,16 +157,6 @@ class ReactTerminal extends React.Component {
       
       this._userInit();
     }
-
-
-    this.term.decreaseFontSize = () => {
-      this.term.setOption('fontSize', --this.fontSize);
-      this.term.fit();
-    };
-    this.term.increaseFontSize = () => {
-      this.term.setOption('fontSize', ++this.fontSize);
-      this.term.fit();
-    };
     
     this._connectToServer();
 
@@ -229,7 +222,7 @@ class ReactTerminal extends React.Component {
     if(this.state.questions.length == 0){
       return;
     }
-    //console.log("Next question",this.state.nextQuestion," and ",questions.length)
+    
 
     if(this.state.nextQuestion >= questions.length && questions.length > 0){
 
@@ -262,12 +255,12 @@ class ReactTerminal extends React.Component {
    
     console.log("Console logging textarea", this.term.textarea.value);
     //answer = answer.replace(pattern," ");
-    console.log("checking answer", answer, " id question",this.state.questions[this.state.nextQuestion].answer)
+    
     let questions = this.state.questions;
     let correct = false;
 
     let correct1 = questions[this.state.nextQuestion].answer;
-    let correct2 = questions[this.state.nextQuestion].answer2;
+    let correct2 = questions[this.state.nextQuestion].answer2 ? questions[this.state.nextQuestion] : "@@@@@"; //fix a bug where alt answer is the empty string so users can answer correctly with nothing
 
     if(CheckSame.checkSame(correct1,answer) || CheckSame.checkSame(correct2,answer)){
 
@@ -424,7 +417,7 @@ class ReactTerminal extends React.Component {
 
     return (
       <div style={containerStyle}>
-        <Prompt color={this.state.promptColor} prompt={this.state.prompt}/>
+        <Prompt color={this.props.promptColor} prompt={this.state.prompt}/>
 
         <WordBox 
          userID={this.state.userID}
@@ -584,5 +577,10 @@ function listenToWindowResize(callback) {
   window.addEventListener('resize', resizeThrottler, false);
 }
 
-export default connect(null,actions)(ReactTerminal);
+function mapStateToProps(state){
+
+  return { promptColor: state.promptColor }
+}
+
+export default connect(mapStateToProps,actions)(ReactTerminal);
 

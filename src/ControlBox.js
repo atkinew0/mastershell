@@ -6,7 +6,8 @@ const style = {
     float:'left',
     width:"200px",
     height:"680px",
-    border:"black solid 2px"
+    border:"black solid 2px",
+    overflow:"scroll"
 }
 
 const titleStyle ={
