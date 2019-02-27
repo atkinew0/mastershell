@@ -24,8 +24,8 @@ import './index.css';
 // serviceWorker.unregister();
 
 const store = createStore(reducers,
-     { auth: { authenticated: localStorage.getItem('token')},
-       promptColor:'#202020'},
+     { auth: { authenticated: localStorage.getItem('token')}
+       },
       applyMiddleware(reduxThunk) );
 
 ReactDOM.render(

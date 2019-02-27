@@ -8,5 +8,5 @@ export default combineReducers({
     auth,
     form:formReducer,
     websocket:websocket,
-    promptColor:prompt
+    prompt:prompt
 });

@@ -15,7 +15,7 @@ import * as fullscreen from 'xterm/lib/addons/fullscreen/fullscreen';
 import * as search from 'xterm/lib/addons/search/search';
 import * as winptyCompat from 'xterm/lib/addons/winptyCompat/winptyCompat';
 
-import * as actions from './actions';
+import {flashCorrect, flashWrong, setNeutral, setPrompt } from './actions/prompt';
 
 
 var parser = require('./parseCom')
@@ -70,7 +70,6 @@ class ReactTerminal extends React.Component {
       lastEntry:"",
       command: [],
       prompt:":",
-      promptColor:'#202020',
       questions: [],
       levels:levels,
       nextQuestion:0,
@@ -169,13 +168,15 @@ class ReactTerminal extends React.Component {
 
   flashPrompt(correct){
     if(correct){
-      this.setState({promptColor:'green'});
+      
+      this.props.flashCorrect();
     }
     else{
-      this.setState({promptColor:'red'});
+      
+      this.props.flashWrong();
     }
 
-    setTimeout(() => { this.setState({promptColor:'#202020'} ) }, 250);
+    setTimeout(() => this.props.setNeutral(), 250);
   }
 
   handleQuestions = (questionsArray) => {
@@ -206,7 +207,10 @@ class ReactTerminal extends React.Component {
 
     if(questionsArray.length == 0){
       console.log("No questions due found")
-      this.setState({prompt:"No questions due for review"},() => {setTimeout(() => this.setState({prompt:"prompt"}), 2000)})
+
+      this.props.Prompt("No questions due for review");
+      setTimeout(() => this.proos.setPrompt(":"), 2000);
+
       
     }else{
       this.setState({questions:questionsArray}, () => {this.updatePrompt(); this.setMode("srs")});
@@ -227,7 +231,8 @@ class ReactTerminal extends React.Component {
     if(this.state.nextQuestion >= questions.length && questions.length > 0){
 
       let level = this.state.questions[0].level;
-      this.setState({prompt:"Level Complete!",questions:[],nextQuestion:0, mode:''},()=>{
+      this.props.setPrompt("Level Complete");
+      this.setState({questions:[],nextQuestion:0, mode:''},()=>{
 
         //on completing a level update users level in both App state and DB
         this.updateLevelCompleted(this.state.userID, level);
@@ -244,7 +249,7 @@ class ReactTerminal extends React.Component {
       
     }else{
 
-      this.setState({prompt:questions[this.state.nextQuestion].prompt});
+      this.props.setPrompt(questions[this.state.nextQuestion].prompt);
     }
 
   }
@@ -260,7 +265,7 @@ class ReactTerminal extends React.Component {
     let correct = false;
 
     let correct1 = questions[this.state.nextQuestion].answer;
-    let correct2 = questions[this.state.nextQuestion].answer2 ? questions[this.state.nextQuestion] : "@@@@@"; //fix a bug where alt answer is the empty string so users can answer correctly with nothing
+    let correct2 = questions[this.state.nextQuestion].answer2 ? questions[this.state.nextQuestion].answer2 : "@@@@@"; //fix a bug where alt answer is the empty string so users can answer correctly with nothing
 
     if(CheckSame.checkSame(correct1,answer) || CheckSame.checkSame(correct2,answer)){
 
@@ -347,7 +352,9 @@ class ReactTerminal extends React.Component {
 
     let oldPrompt = this.state.prompt;
 
-    this.setState({prompt:"Locked"}, () => { setTimeout(() => this.setState({prompt:oldPrompt}), 500)})
+
+    this.props.setPrompt("Level locked");
+    setTimeout(() => this.props.setPrompt(oldPrompt), 500)
   }
 
   stop = () => {
@@ -417,7 +424,7 @@ class ReactTerminal extends React.Component {
 
     return (
       <div style={containerStyle}>
-        <Prompt color={this.props.promptColor} prompt={this.state.prompt}/>
+        <Prompt color={this.props.promptColor} prompt={this.props.prompt}/>
 
         <WordBox 
          userID={this.state.userID}
@@ -484,8 +491,6 @@ class ReactTerminal extends React.Component {
             this.term.attach(this.socket, true , false, (comp) => { console.log("Callback" ,comp)} );
             this.term.writeln("Beginning mastershell...");
 
-            //Note Redux action creator to allow the signout component access to close websocket
-            this.props.websocket(this.socket);
           };
           this.socket.onclose = () => {
             this.term.writeln('Server disconnected!');
@@ -579,8 +584,14 @@ function listenToWindowResize(callback) {
 
 function mapStateToProps(state){
 
-  return { promptColor: state.promptColor }
+
+  let obj = { promptColor: state.promptColor}
+
+  console.log("In MSTP state is",state, "obj is ",obj)
+
+
+  return { promptColor: state.prompt.promptColor, prompt:state.prompt.message }
 }
 
-export default connect(mapStateToProps,actions)(ReactTerminal);
+export default connect(mapStateToProps,{flashCorrect, flashWrong, setNeutral, setPrompt} )(ReactTerminal);
 
