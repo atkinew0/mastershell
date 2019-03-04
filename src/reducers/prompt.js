@@ -1,7 +1,8 @@
 import { CORRECT_ANSWER, WRONG_ANSWER, NEUTRAL, SET } from '../actions/types';
 
 const INITIAL_STATE = {
-    promptColor:"#202020"
+    promptColor:"#202020",
+    message:":"
 }
 
 export default function( state = INITIAL_STATE, action){

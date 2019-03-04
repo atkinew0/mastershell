@@ -32,13 +32,12 @@ class WordBox extends React.Component {
 
     handleClick = () =>{
 
-        this.props.setmode("srs");
         this.props.focus();
 
 
         const myHeaders = new Headers();
         myHeaders.append('Authorization',localStorage.getItem('token'));
-        console.log("My props now",this.props)
+
         
         const theRequest = `http://${HOST}/api/srs/?uid=${this.props.userID}`;
 

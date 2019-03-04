@@ -38,6 +38,7 @@ export default class ControlBox extends React.Component {
         
         if(levelClicked <= nextLevel){
 
+
             const theReq = `http://${ HOST }/api/level/${levelClicked}`;
             const myHeaders = new Headers();
             myHeaders.append('Authorization',localStorage.getItem('token'))
@@ -49,7 +50,7 @@ export default class ControlBox extends React.Component {
                 res.text().then(resText => {
                     
                     let resjson = JSON.parse(resText);
-                    this.props.questionsCall(resjson);
+                    this.props.questionsCall(resjson, levelClicked);
                 });
 
                 this.props.focus();
@@ -65,12 +66,12 @@ export default class ControlBox extends React.Component {
                       borderRadius: '10px',
                      };
 
-        if(elem.finished){
-            style.border = 'solid green 3px';
+        if(elem.selected){
+            style.border = 'solid red 3px';
             style.background = '#66ff66'
     
-        }else if(elem.selected){
-            style.border = 'solid red 3px';
+        }else if(elem.finished){
+            style.border = 'solid green 3px';
             style.background = 'lightblue';
         }
 

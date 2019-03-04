@@ -15,8 +15,16 @@ import * as fullscreen from 'xterm/lib/addons/fullscreen/fullscreen';
 import * as search from 'xterm/lib/addons/search/search';
 import * as winptyCompat from 'xterm/lib/addons/winptyCompat/winptyCompat';
 
-import {flashCorrect, flashWrong, setNeutral, setPrompt } from './actions/prompt';
-
+import {flashCorrect, flashWrong, setNeutral, setPrompt, flashPrompt } from './actions/prompt';
+import { setMode } from './actions/mode';
+import { getQuestions, setQuestions } from './actions/questions';
+import { setNextQuestion} from './actions/nextQuestion';
+import { selectLevel } from './actions/level';
+import { setScore } from './actions/score';
+import { makeLevels, setLevelFinished, setLevelSelected } from './actions/levels';
+import { setLevelCompleted } from './actions/levelCompleted';
+import { makeCommand } from './actions/command';
+import { getUserId } from './actions/userId';
 
 var parser = require('./parseCom')
 parser.init();
@@ -42,48 +50,24 @@ const containerStyle ={
     textAlign:'center'
 }
 
-const levels = []
 const MAX_LEVEL = 31
-const MAX_DISPLAY = 31
-const MAX = Math.min(MAX_DISPLAY, MAX_LEVEL)
-
 
 
 class ReactTerminal extends React.Component {
   constructor(props) {
     super(props);
 
-    this.buffer = [];
-
     this.elementId = `terminal_1`;
     this.failures = 0;
     this.interval = null;
     this.fontSize = 16;
 
-    let levels = []
+    this.props.makeLevels(MAX_LEVEL);
 
-    for(let i = 1; i <= MAX; i++){
-      levels.push({name:`Level ${i}`,number:i, finished:false, selected:false})
-    }
-
-    this.state = {
-      lastEntry:"",
-      command: [],
-      prompt:":",
-      questions: [],
-      levels:levels,
-      nextQuestion:0,
-      mode:'',
-      score:0,
-      userID:'',
-      levelCompleted:'0'
-    };
   }
 
 
   componentDidMount() {
-
-    console.log("Props now are",this.props)
 
     this.term = new Terminal({
       cursorBlink: true,
@@ -120,20 +104,18 @@ class ReactTerminal extends React.Component {
       if(key.charCodeAt(0) === 13){
         
         
-        if(this.term.textarea.value === "next" && this.state.mode != ""){
+        if(this.term.textarea.value === "next" && this.props.mode != ""){
+          this.next();
           
-          this.setState({nextQuestion:this.state.nextQuestion+1}, this.updatePrompt);
         }
 
-        if(this.term.textarea.value === "hint" && this.state.mode!= ""){
-          let hint = this.state.questions[this.state.nextQuestion].answer;
+        if(this.term.textarea.value === "hint" && this.props.mode!= ""){
           
-          this.term.write("  "+hint);
-          this.setState({score:this.state.score -1});
+          this.hint();
          
         }
 
-        if(this.state.mode === 'levels' || this.state.mode === 'srs'){
+        if(this.props.mode === 'levels' || this.props.mode === 'srs'){
           //only check answer if there are questions loaded
           this.checkAnswer(this.term.textarea.value);
         }
@@ -143,7 +125,10 @@ class ReactTerminal extends React.Component {
         
 
         if(command){
-          this._makeCommand(command);
+
+          let typed = this.term.textarea.value;
+
+          this._makeCommand(command, typed);
         }
 
         this.term.textarea.value ="";
@@ -152,12 +137,32 @@ class ReactTerminal extends React.Component {
      
     });
 
-    if(this.state.userID === ''){
+    if(this.props.userId === ''){
       
       this._userInit();
     }
     
     this._connectToServer();
+
+  }
+
+  next() {
+
+    console.log("getting a ntxt")
+    this.props.setNextQuestion(this.props.nextQuestion + 1)
+    .then(() => {
+      console.log("action setNext resolved")
+      this.updatePrompt()
+    });
+  }
+
+  hint(){
+
+    let hint = this.props.questions[this.props.nextQuestion].answer;
+          
+    this.term.write("  "+hint);
+
+    this.props.setScore(this.props.score -1)
 
   }
 
@@ -169,122 +174,124 @@ class ReactTerminal extends React.Component {
   flashPrompt(correct){
     if(correct){
       
-      this.props.flashCorrect();
+      this.props.flashCorrect(300);
     }
     else{
       
-      this.props.flashWrong();
+      this.props.flashWrong(400);
     }
 
-    setTimeout(() => this.props.setNeutral(), 250);
   }
 
-  handleQuestions = (questionsArray) => {
+  handleQuestions = (questionsArray, level) => {
     //this will be called from controlbox which does a db query to get questions
     //and load in a level
-    let levelSelected;
-    if(questionsArray){
-      levelSelected = questionsArray[0].level;
-    }
-    
-    let levels = this.state.levels.map(elem => {
-      if (elem.number == levelSelected)
-          elem.selected = true;
-      else
-          elem.selected = false;
-      return elem;
-    });
-    if(questionsArray.length > 0){
-      this.setState({levels:levels});
 
-      this.setState({nextQuestion: 0});
-      this.setState({questions:questionsArray, mode:"levels"}, this.updatePrompt);
+    
+    this.props.setLevelSelected(this.props.levels, level);
+
+    if(questionsArray.length > 0){
+
+      this.props.getQuestions(level)
+        .then(() => {
+
+          this.props.selectLevel(level);
+          this.props.setNextQuestion(0);
+
+          this.setMode("levels");
+          this.updatePrompt();
+        });
+      
     }
     
   }
 
   handleSRS = (questionsArray) => {
 
-    if(questionsArray.length == 0){
+    console.log("Handlsrs got back qustions array of",questionsArray);
+
+    if(questionsArray.length === 0){
       console.log("No questions due found")
 
-      this.props.Prompt("No questions due for review");
-      setTimeout(() => this.proos.setPrompt(":"), 2000);
-
+      this.props.flashPrompt("No questions due for review", this.props.prompt, 1500);
+  
       
     }else{
-      this.setState({questions:questionsArray}, () => {this.updatePrompt(); this.setMode("srs")});
-    }
 
+      this.props.setQuestions(questionsArray)
+      .then( () => {
+        this.props.setMode("srs");
+        this.updatePrompt();
+      })
+
+    }
 
   }
 
   updatePrompt(){
-    //sets the top prompt to be whatever the next question in this.state.questions is
-    let questions = this.state.questions;
+    //sets the top prompt to be whatever the next question in this.props.questions is
+    let questions = this.props.questions;
     
-    if(this.state.questions.length == 0){
+    if(this.props.questions.length == 0){
       return;
     }
     
 
-    if(this.state.nextQuestion >= questions.length && questions.length > 0){
+    if(this.props.nextQuestion >= questions.length && questions.length > 0){
 
-      let level = this.state.questions[0].level;
+      let level = this.props.questions[0].level;
       this.props.setPrompt("Level Complete");
-      this.setState({questions:[],nextQuestion:0, mode:''},()=>{
 
-        //on completing a level update users level in both App state and DB
-        this.updateLevelCompleted(this.state.userID, level);
-      });
+      this.setMode("");
 
-      let currentLevel = this.state.questions[0].level;
-      let levels = this.state.levels.map(elem =>{
-        if(elem.number == currentLevel)
-          elem.finished = true;
+      this.props.setQuestions("");
+      this.props.setNextQuestion(0);
 
-        return elem;
-      });
-      this.setState({levels:levels});
+      //on completing a level update user's level in both App state and DB
+      this.updateLevelCompleted(this.props.userId, level);
       
     }else{
 
-      this.props.setPrompt(questions[this.state.nextQuestion].prompt);
+      this.props.setPrompt(questions[this.props.nextQuestion].prompt);
     }
 
   }
 
   checkAnswer(answer){
 
-    if(this.state.mode !== 'levels' && this.state.mode !== 'srs') return;
+    if(this.props.mode !== 'levels' && this.props.mode !== 'srs') return;
    
     console.log("Console logging textarea", this.term.textarea.value);
     //answer = answer.replace(pattern," ");
     
-    let questions = this.state.questions;
+    let questions = this.props.questions;
     let correct = false;
 
-    let correct1 = questions[this.state.nextQuestion].answer;
-    let correct2 = questions[this.state.nextQuestion].answer2 ? questions[this.state.nextQuestion].answer2 : "@@@@@"; //fix a bug where alt answer is the empty string so users can answer correctly with nothing
+    let correct1 = questions[this.props.nextQuestion].answer;
+    let correct2 = questions[this.props.nextQuestion].answer2 ? questions[this.props.nextQuestion].answer2 : "@@@@@"; //fix a bug where alt answer is the empty string so users can answer correctly with nothing
 
     if(CheckSame.checkSame(correct1,answer) || CheckSame.checkSame(correct2,answer)){
 
       correct = true;
-      questions[this.state.nextQuestion].answered = true;
+      questions[this.props.nextQuestion].answered = true;
       
-      if(this.state.mode === 'srs'){
-        this.updateDue(questions[this.state.nextQuestion], correct, this.state.userID);
+      if(this.props.mode === 'srs'){
+        this.updateDue(questions[this.props.nextQuestion], correct, this.props.userId);
       }
 
-      this.setState({questions:questions, nextQuestion: this.state.nextQuestion + 1, score:this.state.score + 5}, this.updatePrompt);
+      this.props.setNextQuestion(this.props.nextQuestion + 1);
+
+      this.props.setScore(this.props.score + 2)
+      this.updatePrompt();
     }else{
-      if(this.state.mode === 'levels'){
-        this.setState({score:this.state.score -1});
+      if(this.props.mode === 'levels'){
+        this.props.setScore(this.props.score - 1);
+        
       }
 
-      if(this.state.mode === 'srs'){
+      if(this.props.mode === 'srs'){
         
-        this.updateDue(questions[this.state.nextQuestion], correct, this.state.userID);
+        this.updateDue(questions[this.props.nextQuestion], correct, this.props.userId);
       }
     }
     
@@ -328,11 +335,13 @@ class ReactTerminal extends React.Component {
 
   updateLevelCompleted(uid, levelJustCompleted){
 
-    if(this.state.levelCompleted < levelJustCompleted){
+    if(this.props.levelCompleted < levelJustCompleted){
 
-      let newLevel = this.state.levelCompleted + 1;
+      let newLevel = this.props.levelCompleted + 1;
 
-      this.setState({levelCompleted:newLevel});
+      this.props.setLevelFinished(this.props.levels,newLevel)
+
+      this.props.setLevelCompleted(newLevel);
 
       const myHeaders = new Headers();
       myHeaders.append('Authorization',localStorage.getItem('token'));
@@ -350,74 +359,69 @@ class ReactTerminal extends React.Component {
 
   locked = () => {
 
-    let oldPrompt = this.state.prompt;
+    let oldPrompt = this.props.prompt;
 
-
-    this.props.setPrompt("Level locked");
-    setTimeout(() => this.props.setPrompt(oldPrompt), 500)
+    this.props.flashPrompt("Locked",oldPrompt,500);
+  
   }
 
   stop = () => {
-    console.log("Stopping reviewing")
+    
     //to quit a level or srs reviewing
-    this.setState({mode:"",questions:"",nextQuestion:0,prompt:":"})
+    this.props.setMode("");
+    this.props.setQuestions("");
+    this.props.setNextQuestion(0);
+    this.props.setPrompt(":");
+    
   }
 
   setMode = (mode) => {
-    if(this.state.mode === mode){
+    if(this.props.mode === mode){
       console.log("Attempting to set state to",mode, " it is already in");
+      return;
     }
-    if(this.state.questions.length === 0){
+    if(this.props.questions.length === 0){
       console.log("Attempting to review 0 questions");
       return;
     }
-
-    this.setState({mode:mode});
+    
+  
+    this.props.setMode(mode);
   }
 
   completed(){
-    return {done: this.state.nextQuestion, total:this.state.questions.length }
+    return {done: this.props.nextQuestion, total:this.props.questions.length }
   }
 
   _userInit(){
     //1) query backend auth server passing in JWT Token to get back a user ID
     //2) then when we have user ID use that to get user's level completed
-    //3) finally set levels finished in the app to the users levelCompleted
-    let uid, level;
-    const myHeaders = new Headers();
-    myHeaders.append('Authorization',localStorage.getItem('token'));
-  
-    fetch(`http://${HOST}/userid`, {headers:myHeaders})
-    .then( response => {
-             return response.json() })
-    .then (text =>  {
-             uid = text;
-             this.setState({userID:text.userId });})
-    .then ( () => {
+    //3) finally set levels finished in the app to reflect the user's levelCompleted
+    let level;
+    let token = localStorage.getItem('token');
 
-      fetch(`http://${HOST}/api/user?uid=${uid.userId}`)
+    this.props.getUserId(token)
+    .then ( () => {
+      console.log("userID here is",this.props.userId)
+
+      fetch(`http://${HOST}/api/user?uid=${this.props.userId}`)
       .then ( response => {
           return response.json()})
       .then( text => {
           level = text.levelCompleted;
-          this.setState({levelCompleted:text.levelCompleted});
+          this.props.setLevelCompleted(text.levelCompleted);
+    
       })
       .then( () => {
 
-        let levels = this.state.levels.map(elem => {
-          if (elem.number <= level)
-              elem.finished = true;
-          else
-              elem.finished = false;
-          return elem;
-        });
-
-        this.setState({levels:levels});
-
+        this.props.setLevelFinished(this.props.levels, level);
 
       })
-  });
+      .catch((err) => console.log("Could not init user",err)
+        
+      )
 
+    });
 }
  
   render() {
@@ -427,29 +431,24 @@ class ReactTerminal extends React.Component {
         <Prompt color={this.props.promptColor} prompt={this.props.prompt}/>
 
         <WordBox 
-         userID={this.state.userID}
+         userID={this.props.userId}
          stopReview={this.stop}
-         mode={this.state.mode} 
+         mode={this.props.mode} 
          completed={this.completed()} 
          focus={this.focusTerm} 
-         setmode={this.setMode} 
          questionsCall={this.handleSRS} 
-         lastEntry={this.state.lastEntry} 
-         words={this.state.command}/>
+         words={this.props.command}/>
 
-        <div id={"terminal-container"}  style={{
-        float:'left', top: 0, left: 0, width: '80', height: '100%'
-        }}></div>
+        <div id={"terminal-container"}></div>
 
         <ControlBox 
          completed={this.completed()}
-         score={this.state.score} 
+         score={this.props.score} 
          locked={this.locked} 
-         levels={this.state.levels} 
-         setmode={this.setMode} 
+         levels={this.props.levels} 
          focus={this.focusTerm} 
          questionsCall={this.handleQuestions} 
-         words={this.state.levels}/>
+         words={this.props.levels}/>
 
     </div>
     )
@@ -524,43 +523,14 @@ class ReactTerminal extends React.Component {
     }, 2000);
   }
 
-  _makeCommand(command) {
+  _makeCommand(command, typed) {
     //if command is new command make a new entry for that, otherwise update its typed array to hold its exact
     //input ie ls, ls-al, ls /temp etc etc...
 
-    let typed = this.term.textarea.value;
-
-    //check if entire command input is a repeat, ie already seen exact entry ls -al
-    let repeat = this.state.command.some(commandObj => commandObj.typed === typed);
-
-    if (!repeat) {
-      let seenCommand = this.state.command.some(commandObj => commandObj.command === command);
-
-      if (!seenCommand) {
-        let commandObject = {
-          command: command,
-          typed: [this.term.textarea.value]
-        };
-
-        this.setState({ command: [...this.state.command, commandObject] });
-      }
-      else {
-        let updateCommands = this.state.command;
-
-        updateCommands.forEach(commandObj => {
-          if (commandObj.command === command) {
-            commandObj.typed.push(typed);
-          }
-        });
-
-        // let update = this.state.command.find(commandObj => commandObj.command === command );
-        // update.typed.push(typed);
-        this.setState({ command: [...updateCommands] });
-      }
-    }
-
+    this.props.makeCommand(command, typed, this.props.command);
+    
   }
-};
+}
 
 ReactTerminal.propTypes = {
   options: PropTypes.object
@@ -575,7 +545,7 @@ function listenToWindowResize(callback) {
       resizeTimeout = setTimeout(function () {
         resizeTimeout = null;
         callback();
-      }, 66);
+      }, 666);
     }
   }
 
@@ -584,14 +554,22 @@ function listenToWindowResize(callback) {
 
 function mapStateToProps(state){
 
+  console.log("In MSTP state is",state)
 
-  let obj = { promptColor: state.promptColor}
-
-  console.log("In MSTP state is",state, "obj is ",obj)
-
-
-  return { promptColor: state.prompt.promptColor, prompt:state.prompt.message }
+  return {
+    promptColor: state.prompt.promptColor,
+    prompt: state.prompt.message,
+    mode: state.mode.mode,
+    questions: state.questions.questions,
+    level: state.level.level,
+    nextQuestion: state.nextQuestion.nextQuestion,
+    score:state.score.score,
+    levels:state.levels.levels,
+    levelCompleted:state.levelCompleted.levelCompleted,
+    command:state.command.command,
+    userId:state.userId.userId
+  }
 }
 
-export default connect(mapStateToProps,{flashCorrect, flashWrong, setNeutral, setPrompt} )(ReactTerminal);
+export default connect(mapStateToProps,{getUserId,makeCommand, setLevelCompleted, makeLevels, setLevelFinished, setLevelSelected,setScore, flashCorrect, flashWrong, setNeutral, setPrompt, flashPrompt, setMode, getQuestions, setQuestions, setNextQuestion, selectLevel} )(ReactTerminal);
 
