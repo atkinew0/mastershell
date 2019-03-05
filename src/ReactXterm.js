@@ -164,7 +164,7 @@ class ReactTerminal extends React.Component {
       this.term.setOption('fontSize', ++this.fontSize);
       this.term.fit();
     };
-    
+
     this._connectToServer();
 
   }
@@ -260,7 +260,7 @@ class ReactTerminal extends React.Component {
 
     if(this.state.mode !== 'levels' && this.state.mode !== 'srs') return;
    
-    console.log("Console logging textarea", this.term.textarea.value);
+    console.log("Console logging textarea", this.term);
     //answer = answer.replace(pattern," ");
     console.log("checking answer", answer, " id question",this.state.questions[this.state.nextQuestion].answer)
     let questions = this.state.questions;
