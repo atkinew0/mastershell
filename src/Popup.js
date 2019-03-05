@@ -10,7 +10,7 @@ const style = {
     background: 'pink',
     width: '600px',
     height:'450px',
-    position: 'absolute',
+    position: 'fixed',
     left: '100px',
     top: '150px',
     zIndex: '100'

@@ -20,7 +20,7 @@
     "redux": "^4.0.1",
     "redux-form": "^8.1.0",
     "redux-thunk": "^2.3.0",
-    "xterm": "^3.8.0",
+    "xterm": "3.9.0",
     "yarn": "^1.12.3"
   },
   "scripts": {

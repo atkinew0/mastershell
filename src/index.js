@@ -23,7 +23,10 @@ import './index.css';
 // // Learn more about service workers: http://bit.ly/CRA-PWA
 // serviceWorker.unregister();
 
-const store = createStore(reducers, { auth: { authenticated: localStorage.getItem('token')}}, applyMiddleware(reduxThunk) );
+const store = createStore(reducers,
+     { auth: { authenticated: localStorage.getItem('token')}
+       },
+      applyMiddleware(reduxThunk) );
 
 ReactDOM.render(
 <Provider store ={store} >
