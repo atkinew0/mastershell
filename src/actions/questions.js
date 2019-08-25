@@ -1,5 +1,4 @@
 import { QUESTIONS, QUESTIONS_ERROR, QUESTIONS_SET } from './types';
-import axios from 'axios';
 
 const HOST = process.env.REACT_APP_BACKEND || "mv2-dev.us-east-1.elasticbeanstalk.com";
 

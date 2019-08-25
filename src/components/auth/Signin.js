@@ -18,11 +18,6 @@ const nStyle = {
 
 }
 
-const formStyle = {
-  width:'30%',
-  margin:'auto'
-}
-
 const imgStyle = {
   width:'20%',
   height:'20%',

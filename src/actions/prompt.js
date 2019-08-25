@@ -27,7 +27,7 @@ export const setNeutral = () => {
 }
 
 export const setPrompt = (message) => {
-    console.log("Running a setprompt",message)
+
     return {type:SET,
             payload:message};
 

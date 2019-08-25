@@ -104,12 +104,12 @@ class ReactTerminal extends React.Component {
       if(key.charCodeAt(0) === 13){
         
         
-        if(this.term.textarea.value === "next" && this.props.mode != ""){
+        if(this.term.textarea.value === "next" && this.props.mode !== ""){
           this.next();
           
         }
 
-        if(this.term.textarea.value === "hint" && this.props.mode!= ""){
+        if(this.term.textarea.value === "hint" && this.props.mode !== ""){
           
           this.hint();
          
@@ -141,21 +141,7 @@ class ReactTerminal extends React.Component {
       
       this._userInit();
     }
-<<<<<<< HEAD
-
-
-    this.term.decreaseFontSize = () => {
-      this.term.setOption('fontSize', --this.fontSize);
-      this.term.fit();
-    };
-    this.term.increaseFontSize = () => {
-      this.term.setOption('fontSize', ++this.fontSize);
-      this.term.fit();
-    };
-
-=======
     
->>>>>>> 2d1eaf3735bba64f38c9786d69d355dd6a6c2654
     this._connectToServer();
 
   }
@@ -246,7 +232,7 @@ class ReactTerminal extends React.Component {
     //sets the top prompt to be whatever the next question in this.props.questions is
     let questions = this.props.questions;
     
-    if(this.props.questions.length == 0){
+    if(this.props.questions.length === 0){
       return;
     }
     
@@ -550,21 +536,6 @@ ReactTerminal.propTypes = {
   options: PropTypes.object
 };
 
-function listenToWindowResize(callback) {
-  var resizeTimeout;
-
-  function resizeThrottler() {
-    // ignore resize events as long as an actualResizeHandler execution is in the queue
-    if (!resizeTimeout) {
-      resizeTimeout = setTimeout(function () {
-        resizeTimeout = null;
-        callback();
-      }, 666);
-    }
-  }
-
-  window.addEventListener('resize', resizeThrottler, false);
-}
 
 function mapStateToProps(state){
 
@@ -575,7 +546,7 @@ function mapStateToProps(state){
     prompt: state.prompt.message,
     mode: state.mode.mode,
     questions: state.questions.questions,
-    level: state.level.level,
+    level: state.level,
     nextQuestion: state.nextQuestion.nextQuestion,
     score:state.score.score,
     levels:state.levels.levels,
