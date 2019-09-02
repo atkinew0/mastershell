@@ -6,21 +6,20 @@ import { connect } from 'react-redux';
 import * as actions from '../../actions';
 import terminal from '../../assets/terminal.ico';
 
-const buttonStyle = {
-  display:"block",
-  width:"100%",
-}
 
 const nStyle = {
 
   margin: "50px",
-  display: "flex"
+  display: "flex",
+  flexDirection:'column',
+  justifyContent:'center',
+  marginLeft:'40%'
 
 }
 
 const imgStyle = {
-  width:'20%',
-  height:'20%',
+  width:'30%',
+  height:'30%',
   margin:'auto'
 }
 
@@ -40,7 +39,7 @@ class Signin extends Component{
       
         return (
           <>
-          <img alt="terminal" style={imgStyle} src={terminal} />
+          <center><img alt="terminal" style={imgStyle} src={terminal} /></center>
           <div className="ui stacked segment" style={this.props.SigninStyle}>
             
             <form className="ui large form"  onSubmit={handleSubmit(this.onSubmit)}>
@@ -63,13 +62,13 @@ class Signin extends Component{
                 />
               </fieldset>
               <div>{this.props.errorMessage}</div>
-              <button style={buttonStyle}>Sign In!</button>
+              <center><button className="ui large button" style={{margin:'15px'}}>Sign In!</button></center>
             </form>
 
 
             <div style={nStyle}>
-              <div>New User?  </div>
-              <Link to="/signup"><button>Sign Up</button></Link>
+              <label style={{fontSize:'inherit',fontFamily:'inherit'}}>New User? </label>
+              <Link to="/signup"><button className="ui large button">Sign Up</button></Link>
             </div>
 
             </div>

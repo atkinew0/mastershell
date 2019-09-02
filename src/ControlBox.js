@@ -35,6 +35,7 @@ export default class ControlBox extends React.Component {
                 nextLevel = level.number + 1;
             }
         })
+
         
         if(levelClicked <= nextLevel){
 
@@ -62,8 +63,8 @@ export default class ControlBox extends React.Component {
 
     renderStyle = (elem) => {
 
-        let style = { border: 'solid black 2px',
-                      borderRadius: '10px',
+        let style = { /*border: 'solid black 2px',
+                      borderRadius: '10px',*/
                      };
 
         if(elem.selected){
@@ -72,7 +73,7 @@ export default class ControlBox extends React.Component {
     
         }else if(elem.finished){
             style.border = 'solid green 3px';
-            style.background = 'lightblue';
+            style.background = 'darkgrey';
         }
 
         return style;
@@ -87,7 +88,7 @@ export default class ControlBox extends React.Component {
 
             let completed = elem.selected ? <span style={{fontSize:12}}> {this.props.completed.done}/{this.props.completed.total}</span> : "";
            
-            return <li value={index+1} style={this.renderStyle(elem)} onClick={this.handleClick} key={this.index++}>{elem.name}{completed}</li>;
+            return <li className="ui fluid button large" value={index+1} style={this.renderStyle(elem)} onClick={this.handleClick} key={this.index++}>{elem.name}{completed}</li>;
         })
     }
 
@@ -96,10 +97,12 @@ export default class ControlBox extends React.Component {
             <div style={style}>
             <div style={ titleStyle }>Levels</div>
             
-            <span>Score:{this.props.score}</span>
+            <span style={{margin: '2px', border:'black 2px solid'}}>Score:{this.props.score}</span>
+            <div style={{height:'600px',overflow:'scroll'}}>
             <ul style={{width:'80%',margin:'auto',paddingInlineStart:"0"}}>
             {this.renderWords()}
             </ul>
+            </div>
             </div>
         );
     }

@@ -3,10 +3,10 @@ import React from 'react';
 import Popup from './Popup';
 
 const style = {
-    border: 'black solid 2px',
-    borderRadius: '10px',
-    margin: '1px'
+
+    margin: '2px'
 }
+
 
 export default class Command extends React.Component {
     constructor(props){
@@ -39,7 +39,7 @@ export default class Command extends React.Component {
     render(){
         return (
         <div>
-            <li style={style} onClick={this.handleClick} >{this.props.data.command}</li>
+            <div style={style} className="ui fluid button large" onClick={this.handleClick} > {this.props.data.command} </div>
             {this.renderPop()}
             </div>
         );

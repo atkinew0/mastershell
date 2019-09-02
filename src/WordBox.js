@@ -8,8 +8,7 @@ const style = {
     position:'relative',
     width:"200px",
     height:"680px",
-    border:"black solid 2px",
-    overflow:"scroll"
+    border:"black solid 2px"
 }
 
 const HOST = process.env.REACT_APP_BACKEND || "mv2-dev.us-east-1.elasticbeanstalk.com";
@@ -63,14 +62,14 @@ class WordBox extends React.Component {
     renderReviewButton(){
         if(this.props.mode === "srs"){
             return (
-                 <div onClick={this.props.stopReview} style={{position:'absolute',bottom:'0', border:'2px solid black',background:'rgb(231, 228, 228)'}}>
+                 <div className="ui red button" onClick={this.props.stopReview} style={{position:'absolute',bottom:'0', border:'2px solid black'}}>
                     <span>{this.props.completed.done}/{this.props.completed.total}</span>
                     <p >Stop Reviewing</p>
                  </div>
                 )
         }else{
             return (
-                <div onClick={this.handleClick} style={{ border:'2px solid black',background:'rgb(231, 228, 228)'}}>
+                <div className="ui primary button large" onClick={this.handleClick} style={{ border:'2px solid black'}}>
                     <p >Review My Commands</p>
                  </div>
             )
@@ -81,7 +80,7 @@ class WordBox extends React.Component {
     renderEditButton(){
         return (
             
-            <div style={{border:'2px solid black',background:'rgb(231, 228, 228)'}}>
+            <div className="ui fluid button large" style={{ border:'2px solid black'}}>
                 
                 <p onClick={this.handleClick2}>Edit Commands</p>
             </div>
@@ -113,10 +112,13 @@ class WordBox extends React.Component {
     render(){
         
         return (
-            <div style={style}><div style={ titleStyle }>Commands</div>
-                <ul style={{width:"80%",margin:"auto", paddingInlineStart:"0"}}>
-                {this.renderWords()}
-                </ul>
+            <div style={style}> 
+                <div style={ titleStyle }>Commands</div>
+                <div style={{height:'600px', overflow:'scroll'}}>
+                    <ul style={{width:"80%",margin:"auto", paddingInlineStart:"0"}}>
+                    {this.renderWords()}
+                    </ul>
+                </div>
                 <div style={{display:'flex',position:'absolute',bottom:'0'}}>
                     {this.renderReviewButton()}
                     {this.renderEditButton()}

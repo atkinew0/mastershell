@@ -3,6 +3,41 @@ import {Link} from 'react-router-dom';
 import { connect } from 'react-redux';
 import './HeaderStyle.css'
 
+let headerStyle = {
+    
+    height:'auto',
+    zIndex:'9999',
+    width:'100%',
+    backgroundColor: 'rgba(10,3,3,.26)',
+    margin:'0',
+    padding:'0'
+
+}
+
+let spanStyle = {
+    fontFamily:'Electrolize',
+    fontSize:'32px',
+    fontWeight:'400',
+    letterSpacing:'4.3px',
+    padding:"35px",
+    verticalAlign:'baseline',
+    display:'inline-block'
+}
+
+let navStyle = {
+    display:'inline-block',
+    float:'right',
+    marginRight:'50px'
+
+}
+
+let linkStyle = {
+
+    display:'inline-block',
+    padding:'20px 20px'
+
+}
+
 class Header extends Component {
 
     renderLinks(){
@@ -10,7 +45,7 @@ class Header extends Component {
         if(this.props.authenticated){
             return(
                 <div>
-                     <Link to="/signout"><button>Sign Out</button></Link>
+                     {/*<Link to="/signout"><button>Sign Out</button></Link>*/}
                 </div>
             )
         }else{
@@ -26,10 +61,27 @@ class Header extends Component {
 
     render(){
         return (
+        <div>
         <div className="header">
-            <p >BETA: 'hint' for a hint or 'next' to skip question</p>
-            {this.renderLinks()}
+            <header style={headerStyle}>
+                <span style={spanStyle}> Mastershell</span>
+
+                <nav style={navStyle}>
+                    <ul >
+                        <li style={linkStyle}>login</li>
+                        <Link to="/about" style={linkStyle}>about</Link>
+                        
+                       
+                    </ul>
+
+                </nav>
+            </header>
+
+           
         </div>
+        {this.renderLinks()}
+         
+         </div>
         )
     }
 

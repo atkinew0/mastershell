@@ -45,7 +45,7 @@ const containerStyle ={
     top: '50%',
     left: '50%',
     marginRight: '-50%',
-    marginTop: '15px',
+    marginTop: '80px',
     transform: 'translate(-50%, -50%)',
     textAlign:'center'
 }
@@ -71,7 +71,7 @@ class ReactTerminal extends React.Component {
 
     this.term = new Terminal({
       cursorBlink: true,
-      rows: 36,
+      rows: 37,
       fontSize: this.fontSize
     });
 
@@ -231,8 +231,10 @@ class ReactTerminal extends React.Component {
   updatePrompt(){
     //sets the top prompt to be whatever the next question in this.props.questions is
     let questions = this.props.questions;
+
+    console.log("Updating prompt, mode is",this.props.mode, "questions are",questions,"next is",this.props.nextQuestion)
     
-    if(this.props.questions.length === 0){
+    if(questions.length === 0){
       return;
     }
     
@@ -252,7 +254,19 @@ class ReactTerminal extends React.Component {
       
     }else{
 
-      this.props.setPrompt(questions[this.props.nextQuestion].prompt);
+      //this if test designed to skip srs questions which are not due yet and recursively calls updatePrompt again
+      let now = new Date().getTime();
+      
+      if(this.props.mode === 'srs' && questions[this.props.nextQuestion].due > now){
+
+        console.log("We are in srs mode and this question is due in the future, running skip protocol")
+
+          this.props.setNextQuestion(this.props.nextQuestion + 1);
+          this.updatePrompt();
+      }else{
+        this.props.setPrompt(questions[this.props.nextQuestion].prompt);
+      }
+      
     }
 
   }
@@ -277,6 +291,8 @@ class ReactTerminal extends React.Component {
       
       if(this.props.mode === 'srs'){
         this.updateDue(questions[this.props.nextQuestion], correct, this.props.userId);
+        
+
       }
 
       this.props.setNextQuestion(this.props.nextQuestion + 1);
@@ -305,31 +321,43 @@ class ReactTerminal extends React.Component {
     let dueObj = TimeDue.update(question,correct);
     let repetitions = correct ? question.repetitions + 1 : 0;
 
+    for(let i = 0; i < this.props.questions.length; i++){
+      
+      if(this.props.questions[i].id === question.id){
+        this.props.questions[i].due = dueObj.timeDue;
+        this.props.questions[i].daysTillDue = dueObj.futureDays;
+        this.props.questions[i].repetitions = repetitions;
 
-    let theBody = {
-      id:question.id,
-      due:dueObj.timeDue,
-      daysTillDue:dueObj.futureDays,
-      repetitions: repetitions,
-      uid:uid
+      }
     }
 
-    let theReq = `http://${HOST}/api/srs`;
+    this.props.setQuestions(this.props.questions);
 
-    fetch(theReq, {
-      body: JSON.stringify(theBody), // data can be `string` or {object}!
-      headers:{
-      'Content-Type': 'application/json'
-      },
-      method:'PUT'}).then( res => {
-      if(!res.ok) console.log(res.status);
 
-      res.text().then(resText => {
-          console.log(resText);
+    // let theBody = {
+    //   id:question.id,
+    //   due:dueObj.timeDue,
+    //   daysTillDue:dueObj.futureDays,
+    //   repetitions: repetitions,
+    //   uid:uid
+    // }
+
+    // let theReq = `http://${HOST}/api/srs`;
+
+    // fetch(theReq, {
+    //   body: JSON.stringify(theBody), // data can be `string` or {object}!
+    //   headers:{
+    //   'Content-Type': 'application/json'
+    //   },
+    //   method:'PUT'}).then( res => {
+    //   if(!res.ok) console.log(res.status);
+
+    //   res.text().then(resText => {
+    //       console.log(resText);
           
-      });
+    //   });
 
-    })
+    //})
 
   }
 
@@ -369,9 +397,36 @@ class ReactTerminal extends React.Component {
     
     //to quit a level or srs reviewing
     this.props.setMode("");
+
+    //this is where we need a update due that updates all due times on server maybe like an updateAll
+    let theBody = {
+      uid:this.props.userId,
+      questions:this.props.questions
+    }
+
+    let theReq = `http://${HOST}/api/srs`;
+
+    fetch(theReq, {
+      body: JSON.stringify(theBody), // data can be `string` or {object}!
+      headers:{
+      'Content-Type': 'application/json'
+      },
+      method:'PUT'}).then( res => {
+      if(!res.ok) console.log(res.status);
+
+      res.text().then(resText => {
+          console.log(resText);
+          
+      });
+
+    })
+
+
+
     this.props.setQuestions("");
     this.props.setNextQuestion(0);
     this.props.setPrompt(":");
+
     
   }
 

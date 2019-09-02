@@ -12,6 +12,7 @@ import Signup from './components/auth/Signup';
 import reducers from './reducers';
 import Signout from './components/Signout'
 import Signin from './components/auth/Signin';
+import About from './components/About';
 import ReactXterm from './ReactXterm';
 
 import './index.css';
@@ -33,6 +34,7 @@ ReactDOM.render(
     <BrowserRouter>
     <App>
         <Route path ='/' exact component={Welcome}/>
+        <Route path ='/about' exact component={About}/>
         <Route path='/signup' component={Signup} />
         <Route path='/feature' component={ReactXterm}/>
         <Route path='/signout' component={Signout}/>
