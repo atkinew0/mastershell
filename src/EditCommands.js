@@ -107,7 +107,6 @@ class EditCommands extends React.Component{
             else
                 return res.json()
         }).then(text =>{
-            console.log("My commands are",text)
 
             let commands = text.map(command => {
                 return {...command, delete:false}
@@ -139,12 +138,12 @@ class EditCommands extends React.Component{
     delete = () => {
 
         let toDelete = this.state.commands.filter(command => command.delete).map(command => command.id);
-        console.log("Todelete is here", toDelete)
+        
 
         if(!this.state.confirmDelete){
             this.setState({askDelete:true})
         }else{
-            console.log("carrying out delete operation")
+            
             this.setState({askDelete:false, confirmDelete:false})
 
             const theReq = `http://${ HOST }/api/srs/delete`;

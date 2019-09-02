@@ -240,21 +240,27 @@ class ReactTerminal extends React.Component {
 
     if(this.props.nextQuestion >= questions.length && questions.length > 0){
 
-      if(this.props.mode === 'srs'){
-        //user has finished or skipped through all srs questions so we call stop automatically to update the database accordingly
-        this.stop();
+
+      if(this.props.mode === 'levels'){
+        let level = this.props.questions[0].level;
+        this.updateLevelCompleted(this.props.userId, level);
       }
 
-      let level = this.props.questions[0].level;
-      this.props.setPrompt("Level Complete");
+      
+      this.props.setPrompt("Questions Complete");
 
       this.setMode("");
 
       this.props.setQuestions("");
       this.props.setNextQuestion(0);
 
+      if(this.props.mode === 'srs'){
+        //user has finished or skipped through all srs questions so we call stop automatically to update the database accordingly
+        this.stop();
+      }
+
       //on completing a level update user's level in both App state and DB
-      this.updateLevelCompleted(this.props.userId, level);
+      
       
     }else{
 
@@ -262,8 +268,6 @@ class ReactTerminal extends React.Component {
       let now = new Date().getTime();
       
       if(this.props.mode === 'srs' && questions[this.props.nextQuestion].due > now){
-
-        
 
           this.props.setNextQuestion(this.props.nextQuestion + 1);
           this.updatePrompt();
@@ -424,8 +428,6 @@ class ReactTerminal extends React.Component {
       });
 
     })
-
-
 
     this.props.setQuestions("");
     this.props.setNextQuestion(0);
