@@ -63,7 +63,7 @@ class WordBox extends React.Component {
         if(this.props.mode === "srs"){
             return (
                  <div className="ui red button" onClick={this.props.stopReview} style={{position:'absolute',bottom:'0', border:'2px solid black'}}>
-                    <span>{this.props.completed.done}/{this.props.completed.total}</span>
+                    
                     <p >Stop Reviewing</p>
                  </div>
                 )

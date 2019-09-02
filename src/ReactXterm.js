@@ -232,7 +232,7 @@ class ReactTerminal extends React.Component {
     //sets the top prompt to be whatever the next question in this.props.questions is
     let questions = this.props.questions;
 
-    console.log("Updating prompt, mode is",this.props.mode, "questions are",questions,"next is",this.props.nextQuestion)
+    
     
     if(questions.length === 0){
       return;
@@ -240,6 +240,11 @@ class ReactTerminal extends React.Component {
     
 
     if(this.props.nextQuestion >= questions.length && questions.length > 0){
+
+      if(this.props.mode === 'srs'){
+        //user has finished or skipped through all srs questions so we call stop automatically to update the database accordingly
+        this.stop();
+      }
 
       let level = this.props.questions[0].level;
       this.props.setPrompt("Level Complete");
@@ -259,7 +264,7 @@ class ReactTerminal extends React.Component {
       
       if(this.props.mode === 'srs' && questions[this.props.nextQuestion].due > now){
 
-        console.log("We are in srs mode and this question is due in the future, running skip protocol")
+        
 
           this.props.setNextQuestion(this.props.nextQuestion + 1);
           this.updatePrompt();
@@ -398,7 +403,7 @@ class ReactTerminal extends React.Component {
     //to quit a level or srs reviewing
     this.props.setMode("");
 
-    //this is where we need a update due that updates all due times on server maybe like an updateAll
+    //update due that updates all due times based on questions currently in memory
     let theBody = {
       uid:this.props.userId,
       questions:this.props.questions
