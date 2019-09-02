@@ -148,10 +148,9 @@ class ReactTerminal extends React.Component {
 
   next() {
 
-    console.log("getting a ntxt")
+    
     this.props.setNextQuestion(this.props.nextQuestion + 1)
     .then(() => {
-      console.log("action setNext resolved")
       this.updatePrompt()
     });
   }
@@ -462,7 +461,7 @@ class ReactTerminal extends React.Component {
 
     this.props.getUserId(token)
     .then ( () => {
-      console.log("userID here is",this.props.userId)
+      
 
       fetch(`http://${HOST}/api/user?uid=${this.props.userId}`)
       .then ( response => {
@@ -599,7 +598,6 @@ ReactTerminal.propTypes = {
 
 function mapStateToProps(state){
 
-  console.log("In MSTP state is",state)
 
   return {
     promptColor: state.prompt.promptColor,
