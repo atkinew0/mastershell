@@ -1,1 +1,1 @@
-mongoimport -h ds145563.mlab.com:45563 -u mainuser -p <insert> -d mastershell -c levels --file levels.json --jsonArray
+mongoimport -h ds145563.mlab.com:45563 -u mainuser -p ginyu77 -d mastershell -c levels --file levels.json --jsonArray

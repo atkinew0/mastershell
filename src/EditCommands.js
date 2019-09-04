@@ -4,7 +4,6 @@ const HOST = process.env.REACT_APP_BACKEND || "mv2-dev.us-east-1.elasticbeanstal
 
 const style = {
     border: '2px black solid',
-    background: 'pink',
     position: 'fixed',
     height:'80%',
     width:'60%',
@@ -12,7 +11,9 @@ const style = {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     zIndex: '100',
-    borderRadius:'10px'
+    borderRadius:'10px',
+    background:'white',
+    overflow:'scroll'
     }
 
 const askStyle = {
@@ -82,7 +83,7 @@ class EditCommands extends React.Component{
 
         return this.state.commands.map( command => {
             return (<tr style={tableI} key={command.id}>
-                        <td style={tableI}>{command.id}</td>
+                        
                         <td style={tableI}>{command.answer}</td>
                         <td style={tableI}>{command.prompt}</td>
                         <td style={tableI}>{Math.round(Math.max((command.due - now)/(24*60*60*1000),0))} days</td>
@@ -180,11 +181,10 @@ class EditCommands extends React.Component{
         return (
         
         <div style={style}>
-            <h2>Edit Commands</h2>
+            <h2 style={{margin:'5px'}}>Edit Commands</h2>
             <table style={tableStyle}>
             <tbody>
             <tr style={tableI}>
-                <th style={tableI}>ID</th>
                 <th style={tableI}>Command</th>
                 <th style={tableI}>Prompt</th>
                 <th style={tableI}>Next Review</th>

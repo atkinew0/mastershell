@@ -7,26 +7,44 @@ const HOST = process.env.REACT_APP_BACKEND || "mv2-dev.us-east-1.elasticbeanstal
 
 const style = {
     border: '2px black solid',
-    background: 'pink',
     width: '600px',
     height:'450px',
     position: 'fixed',
+    background:'white',
     left: '100px',
     top: '150px',
-    zIndex: '100'
+    zIndex: '100',
+    margin:'10px'
     }
+
+const group = {
+    
+}
+
+const labelStyle ={
+    display: 'inline-block',
+    fontSize:'16px',
+    float: 'left',
+    clear: 'left',
+    textAlign: 'right',
+    width:"20%",
+    margin:'5px'
+}
 
 const selectStyle = {
     margin: '10px',
     padding: '10px',
     fontSize: '16px',
-    width:'80%'
+    width:'70%'
 }
 
 const inputStyle = {
-    padding:"5px",
+    
     fontSize: '16px',
-    width:'80%'
+    display:'inline-block',
+    float:'left',
+    margin:'5px',
+    width :'70%'
 }
 
 
@@ -112,18 +130,21 @@ export default class Popup extends React.Component {
         return (
             <div style={style}>
                 <div >
-                    <h3>Add command to Database</h3>
+                    <h3 style={{margin:'10px'}}>Add command to review </h3>
                     <div >
                         <form onKeyPress={this.handleKey }>
                             
-                            <label>Command </label><input style={inputStyle} onChange={this.onChange('command')} value ={this.state.display} type="text"></input><br/>
-                            <label>Prompt </label><input style={inputStyle} onChange={this.onChange('prompt')} type="text" size="200px"></input><br/>
-                            <select style={selectStyle} onChange={this.selectOption}>
+                            <label style={labelStyle}>Command </label><input style={inputStyle} onChange={this.onChange('command')} value ={this.state.display} type="text"></input><br/>
+                            <label style={labelStyle}>Prompt </label><input style={inputStyle} onChange={this.onChange('prompt')} type="text" size="200px"></input><br/>
+
+                            <div style={group}>
+                            <label style={labelStyle}>Alternate </label><select style={selectStyle} onChange={this.selectOption}>
                                 {this.renderOptions()}
                             </select>
-                        <div > 
-                        <button style={{fontSize:"16px"}} type="button" onClick={this.props.close}>Close </button>
-                        <button style={{fontSize:"16px"}} type="button" onClick={this.onSubmit}>Submit</button>
+                            </div>
+                        <div> 
+                        <button className ="ui button" style={{fontSize:"16px"}} type="button" onClick={this.props.close}>Close </button>
+                        <button className = "ui button" style={{fontSize:"16px"}} type="button" onClick={this.onSubmit}>Submit</button>
                         </div>
                         </form>
                     </div>

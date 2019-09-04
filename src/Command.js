@@ -31,7 +31,7 @@ export default class Command extends React.Component {
     }
     
     handleClick = (element) => {
-        console.log("Clicked on me with data",element, element.typed,this.props.data);
+        
         this.setState( {renderPop:true} );
         //rendering a Popup when clicked that allows user to save to database
     }

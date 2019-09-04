@@ -200,6 +200,7 @@ class ReactTerminal extends React.Component {
 
     
     this.props.setLevelSelected(this.props.levels, level);
+    this.socket.send('cd /home/user/level' + level +'\r');
 
     if(questionsArray.length > 0){
 

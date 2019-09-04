@@ -10,7 +10,7 @@
   {
     "level": 1,
     "id": 1,
-    "prompt": "change directory it to 'temp' directory",
+    "prompt": "change directory to 'temp' directory",
     "answer": "cd temp",
     "answer2": "",
     "answered": 0
@@ -43,8 +43,8 @@
     "level": 1,
     "id": 5,
     "prompt": "make a directory called 'temp2'",
-    "answer": "mkdir temp",
-    "answer2": "mkdir temp",
+    "answer": "mkdir temp2",
+    "answer2": "mkdir temp2",
     "answered": 0
   },
   {
@@ -1515,7 +1515,7 @@
     "level": 29,
     "id": 6,
     "prompt": "print a sequence of numbers 1 to 15 on a single line (single space in between)",
-    "answer": "seq -s " " 15",
+    "answer": "seq -s ' ' 15",
     "answer2": "echo {1..15}",
     "answered": 0
   },
