@@ -148,11 +148,23 @@ class ReactTerminal extends React.Component {
 
   next() {
 
-    
-    this.props.setNextQuestion(this.props.nextQuestion + 1)
+    console.log("Current nextQ",this.props.nextQuestion, this.props.questions.length)
+
+    if((this.props.nextQuestion + 1) === this.props.questions.length){
+
+    this.props.setQuestions("");
+    this.props.setNextQuestion(0);
+    this.props.setPrompt(":");
+    this.props.setMode("");
+
+    }else{
+      this.props.setNextQuestion(this.props.nextQuestion + 1)
     .then(() => {
       this.updatePrompt()
     });
+    }
+
+    
   }
 
   hint(){
@@ -207,9 +219,12 @@ class ReactTerminal extends React.Component {
 
   handleSRS = (questionsArray) => {
 
+    let questions = questionsArray.questions;
+    let noneDue = questionsArray.noneDue;
+
     console.log("Handlsrs got back qustions array of",questionsArray);
 
-    if(questionsArray.length === 0){
+    if(noneDue){
       console.log("No questions due found")
 
       this.props.flashPrompt("No questions due for review", this.props.prompt, 1500);
@@ -217,7 +232,7 @@ class ReactTerminal extends React.Component {
       
     }else{
 
-      this.props.setQuestions(questionsArray)
+      this.props.setQuestions(questions)
       .then( () => {
         this.props.setMode("srs");
         this.updatePrompt();
@@ -249,15 +264,15 @@ class ReactTerminal extends React.Component {
       
       this.props.setPrompt("Questions Complete");
 
-      this.setMode("");
-
-      this.props.setQuestions("");
-      this.props.setNextQuestion(0);
-
       if(this.props.mode === 'srs'){
         //user has finished or skipped through all srs questions so we call stop automatically to update the database accordingly
         this.stop();
       }
+
+      this.setMode("");
+
+      this.props.setQuestions("");
+      this.props.setNextQuestion(0);
 
       //on completing a level update user's level in both App state and DB
       

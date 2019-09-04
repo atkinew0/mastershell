@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import { connect } from 'react-redux';
 import './HeaderStyle.css'
+import Modal from './Modal'
+import Signin from './auth/Signin';
 
 let headerStyle = {
     
@@ -40,12 +42,23 @@ let linkStyle = {
 
 class Header extends Component {
 
+    state = { show: false };
+
+    showModal = () => {
+        console.log("Clicked show");
+        this.setState({ show: true });
+      };
+    
+      hideModal = () => {
+        this.setState({ show: false });
+      };
+
     renderLinks(){
         
         if(this.props.authenticated){
             return(
                 <div>
-                     {/*<Link to="/signout"><button>Sign Out</button></Link>*/}
+                  
                 </div>
             )
         }else{
@@ -60,15 +73,21 @@ class Header extends Component {
     }
 
     render(){
+
+        
+
         return (
         <div>
+            <div>
+           
+            </div>
         <div className="header">
             <header style={headerStyle}>
                 <span style={spanStyle}> Mastershell</span>
 
                 <nav style={navStyle}>
                     <ul >
-                        <li style={linkStyle}>login</li>
+                        <Link to="/Signin" style={linkStyle}>login</Link>
                         <Link to="/about" style={linkStyle}>about</Link>
                         
                        

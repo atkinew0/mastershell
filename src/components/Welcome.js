@@ -1,6 +1,5 @@
 import React from 'react';
 import Signin from './auth/Signin';
-import { isAbsolute } from 'path';
 import Modal from './Modal'
 import Footer from './Footer'
 
@@ -41,6 +40,8 @@ class Welcome extends React.Component {
 
     render(){
 
+        console.log("History props head in header are",this.props)
+
         return (
             <div>
                 <Modal show={this.state.show} handleClose={this.hideModal}>
@@ -50,7 +51,7 @@ class Welcome extends React.Component {
             <div style={{margin:'50px'}}>
                 <center><iframe style={{frameStyle}} width="600" height="400" src="https://www.youtube.com/embed/9YffrCViTVk" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
             </div>
-            <center><button onClick={this.showModal} className="ui button large">open</button></center>
+            <center><button onClick={this.showModal} className="ui button primary massive">Start</button></center>
             <Footer />
             </div>
         )

@@ -42,7 +42,7 @@
   {
     "level": 1,
     "id": 5,
-    "prompt": "make a directory called 'temp'",
+    "prompt": "make a directory called 'temp2'",
     "answer": "mkdir temp",
     "answer2": "mkdir temp",
     "answered": 0
@@ -50,7 +50,7 @@
   {
     "level": 2,
     "id": 0,
-    "prompt": "display contents of file 'test 1' to standard output",
+    "prompt": "display contents of file 'test1' to standard output",
     "answer": "cat test1",
     "answer2": "",
     "answered": 0
@@ -58,7 +58,7 @@
   {
     "level": 2,
     "id": 1,
-    "prompt": "display contents of file 'test 1' including endlines, tabs, and non printing characters to standard output",
+    "prompt": "display contents of file 'test1' including endlines, tabs, and non printing characters to standard output",
     "answer": "cat -A test1",
     "answer2": "cat -vET test1",
     "answered": 0
@@ -186,7 +186,7 @@
   {
     "level": 5,
     "id": 1,
-    "prompt": "Create 26 new files in the current working directory named alphabetically A through Z",
+    "prompt": "Create 26 new files in the current working directory named alphabetically A through Z using brace expansion",
     "answer": "touch {A..Z}",
     "answer2": "",
     "answered": 0
@@ -226,32 +226,32 @@
   {
     "level": 6,
     "id": 2,
-    "prompt": "Overwrite file named 'test1' in current working directory so it cannot be recovered",
-    "answer": "shred test1",
+    "prompt": "Overwrite file named 'test2' in current working directory so it cannot be recovered",
+    "answer": "shred test2",
     "answer2": "",
     "answered": 0
   },
   {
     "level": 6,
     "id": 3,
-    "prompt": "Delete (unlink name from file system) a file called 'test1' while printing actions to stdout",
-    "answer": "rm -v",
+    "prompt": "Delete (unlink name from file system) a file called 'test3' while printing actions to stdout",
+    "answer": "rm -v test3",
     "answer2": "",
     "answered": 0
   },
   {
     "level": 6,
     "id": 4,
-    "prompt": "Delete (unlink name from file system) a file called 'test1' with prompting before deletion",
-    "answer": "rm -i test1",
+    "prompt": "Delete (unlink name from file system) a file called 'test4' with prompting before deletion",
+    "answer": "rm -i test4",
     "answer2": "",
     "answered": 0
   },
   {
     "level": 6,
     "id": 5,
-    "prompt": "Delete (unlink name from file system) a directory called 'dir1' in the current working directory, do not ask before deleting write protected files",
-    "answer": "rm -rf dir1",
+    "prompt": "Delete (unlink name from file system) a directory called 'dir2' in the current working directory, do not ask before deleting write protected files",
+    "answer": "rm -rf dir2",
     "answer2": "",
     "answered": 0
   },
@@ -266,8 +266,8 @@
   {
     "level": 7,
     "id": 1,
-    "prompt": "List file attributes of the file 'test1'",
-    "answer": "lsattr test1",
+    "prompt": "List file attributes of the files in the current directory'",
+    "answer": "lsattr",
     "answer2": "",
     "answered": 0
   },
@@ -475,7 +475,7 @@
     "level": 11,
     "id": 2,
     "prompt": "check what type of files all files in the '/boot' directory are",
-    "answer": "file boot*",
+    "answer": "file /boot/*",
     "answer2": "",
     "answered": 0
   },
@@ -946,17 +946,17 @@
   {
     "level": 20,
     "id": 0,
-    "prompt": "run program to page through syslog (/var/log/syslog), then type q to quit",
-    "answer": "less /var/sys/log",
-    "answer2": "more /var/sys/log",
+    "prompt": "run program to page through log (/var/log/dpkg.log), then type q to quit",
+    "answer": "less /var/log/dpkg.log",
+    "answer2": "more /var/log/dpkg.log",
     "answered": 0
   },
   {
     "level": 20,
     "id": 1,
-    "prompt": "run program to page through syslong (/var/log/syslog) as a background process (use space between all terms)",
-    "answer": "less /var/sys/log &",
-    "answer2": "more /var/sys/log &",
+    "prompt": "run program to page through syslong (/var/log/dpkg.log) as a background process (use space between all terms)",
+    "answer": "less /var/log/dpkg.log &",
+    "answer2": "more /var/log/dpkg.log &",
     "answered": 0
   },
   {
@@ -994,9 +994,9 @@
   {
     "level": 20,
     "id": 6,
-    "prompt": "Again run program to page through syslong (/var/log/syslog) as a background process (use space between all terms)",
-    "answer": "less /var/sys/log &",
-    "answer2": "more /var/sys/log &",
+    "prompt": "Again run program to page through syslong (/var/log/dpkg.log) as a background process (use space between all terms)",
+    "answer": "less /var/log/dpkg.log &",
+    "answer2": "more /var/log/dpkg.log &",
     "answered": 0
   },
   {
@@ -1027,7 +1027,7 @@
     "level": 21,
     "id": 0,
     "prompt": "create a file called 'test3' in the current working directory by running man ls > test3",
-    "answer": "man ls > test1",
+    "answer": "man ls > test3",
     "answer2": "",
     "answered": 0
   },
@@ -1243,7 +1243,7 @@
     "level": 23,
     "id": 8,
     "prompt": "display the size on disk of a directory named dir1",
-    "answer": "du",
+    "answer": "du dir1",
     "answer2": "",
     "answered": 0
   },
@@ -1251,7 +1251,7 @@
     "level": 23,
     "id": 9,
     "prompt": "display the side on disk of a directory named dir1 in human readable format",
-    "answer": "du -h",
+    "answer": "du dir 1 -h",
     "answer2": "",
     "answered": 0
   },
@@ -1260,7 +1260,7 @@
     "id": 10,
     "prompt": "display the size on disk of all files and directories in the current folder in human readable format",
     "answer": "du * -h",
-    "answer2": "",
+    "answer2": "du -h",
     "answered": 0
   },
   {
@@ -1347,7 +1347,7 @@
     "level": 24,
     "id": 6,
     "prompt": "search and find all files or folders ending in .jpg  using locate database",
-    "answer": "locate test",
+    "answer": "locate *.jpg",
     "answer2": "",
     "answered": 0
   },
@@ -1515,7 +1515,7 @@
     "level": 29,
     "id": 6,
     "prompt": "print a sequence of numbers 1 to 15 on a single line (single space in between)",
-    "answer": "seq -s “ “ 15",
+    "answer": "seq -s " " 15",
     "answer2": "echo {1..15}",
     "answered": 0
   },
