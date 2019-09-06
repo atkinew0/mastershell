@@ -11,7 +11,7 @@ const style = {
     border:"black solid 2px"
 }
 
-const HOST = process.env.REACT_APP_BACKEND || "mv2-dev.us-east-1.elasticbeanstalk.com";
+const HOST = process.env.REACT_APP_BACKEND || "mv-dev.us-east-1.elasticbeanstalk.com";
 
 const titleStyle ={
     border:'2px solid black',

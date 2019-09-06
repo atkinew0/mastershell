@@ -1,6 +1,6 @@
 import { AUTH_USER, AUTH_ERROR, WEBSOCKET } from './types';
 import axios from 'axios';
-const HOST = process.env.REACT_APP_BACKEND || "mv2-dev.us-east-1.elasticbeanstalk.com";
+const HOST = process.env.REACT_APP_BACKEND || "mv-dev.us-east-1.elasticbeanstalk.com";
 
 export const signup = ({email, password}, callback) => async dispatch => {
     try{

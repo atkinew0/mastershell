@@ -37,7 +37,7 @@ Terminal.applyAddon(fullscreen);
 Terminal.applyAddon(search);
 Terminal.applyAddon(winptyCompat);
 
-const HOST = process.env.REACT_APP_BACKEND || "mv2-dev.us-east-1.elasticbeanstalk.com";
+const HOST = process.env.REACT_APP_BACKEND || "mv-dev.us-east-1.elasticbeanstalk.com";
 const SOCKET_URL = `ws://${ HOST }/terminals/`;
 
 const containerStyle ={

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const HOST = process.env.REACT_APP_BACKEND || "mv2-dev.us-east-1.elasticbeanstalk.com";
+const HOST = process.env.REACT_APP_BACKEND || "mv-dev.us-east-1.elasticbeanstalk.com";
 
 const style = {
     border: '2px black solid',

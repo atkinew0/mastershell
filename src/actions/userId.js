@@ -1,6 +1,6 @@
 import { USER } from './types';
 
-const HOST = process.env.REACT_APP_BACKEND || "mv2-dev.us-east-1.elasticbeanstalk.com";
+const HOST = process.env.REACT_APP_BACKEND || "mv-dev.us-east-1.elasticbeanstalk.com";
 
 export const getUserId = (token) => (dispatch) => new Promise ((resolve,reject) => {
 
