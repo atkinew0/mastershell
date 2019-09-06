@@ -1,4 +1,5 @@
 import React from 'react';
+import { SSL_OP_TLS_ROLLBACK_BUG } from 'constants';
 
 const HOST = process.env.REACT_APP_BACKEND || "mv-dev.us-east-1.elasticbeanstalk.com";
 
@@ -41,7 +42,7 @@ const checkStyle = {
 const tableStyle = {
     margin:'auto',
     width:'90%',
-    height:'90&'
+    borderRadius:'2px'
 }
 
 class EditCommands extends React.Component{
@@ -184,7 +185,7 @@ class EditCommands extends React.Component{
             <h2 style={{margin:'5px'}}>Edit Commands</h2>
             <table style={tableStyle}>
             <tbody>
-            <tr style={tableI}>
+            <tr style = {{background:'rgb(231,228,228)'}}>
                 <th style={tableI}>Command</th>
                 <th style={tableI}>Prompt</th>
                 <th style={tableI}>Next Review</th>

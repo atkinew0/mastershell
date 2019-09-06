@@ -20,6 +20,8 @@ let spanStyle = {
     fontFamily:'Electrolize',
     fontSize:'32px',
     fontWeight:'400',
+    color:'black',
+    textDecoration:'none',
     letterSpacing:'4.3px',
     padding:"35px",
     verticalAlign:'baseline',
@@ -83,7 +85,7 @@ class Header extends Component {
             </div>
         <div className="header">
             <header style={headerStyle}>
-                <span style={spanStyle}> Mastershell</span>
+                <a href="/" style={spanStyle}> Mastershell</a>
 
                 <nav style={navStyle}>
                     <ul >

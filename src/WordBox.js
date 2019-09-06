@@ -64,13 +64,13 @@ class WordBox extends React.Component {
             return (
                  <div className="ui red button" onClick={this.props.stopReview} style={{position:'absolute',bottom:'0', border:'2px solid black'}}>
                     
-                    <p >Stop Reviewing</p>
+                    <span >Stop Reviewing</span>
                  </div>
                 )
         }else{
             return (
                 <div className="ui primary button large" onClick={this.handleClick} style={{ border:'2px solid black'}}>
-                    <p >Review My Commands</p>
+                    <span >Review My Commands</span>
                  </div>
             )
             
@@ -82,7 +82,7 @@ class WordBox extends React.Component {
             
             <div className="ui fluid button large" style={{ border:'2px solid black'}}>
                 
-                <p onClick={this.handleClick2}>Edit Commands</p>
+                <span onClick={this.handleClick2}>Edit Commands</span>
             </div>
             
             )
