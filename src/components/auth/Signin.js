@@ -62,13 +62,13 @@ class Signin extends Component{
                 />
               </fieldset>
               <div>{this.props.errorMessage}</div>
-              <center><button className="ui large button" style={{margin:'15px'}}>Sign In!</button></center>
+              <center><button className="ui huge button" style={{margin:'15px'}}>Sign In!</button></center>
             </form>
 
 
             <div style={nStyle}>
-              <label style={{fontSize:'inherit',fontFamily:'inherit'}}>New User? </label>
-              <Link to="/signup"><button className="ui large button">Sign Up</button></Link>
+              <label style={{fontSize:'20px',fontFamily:'inherit'}}>New User? </label>
+              <Link to="/signup"><button className="ui huge button">Sign Up</button></Link>
             </div>
 
             </div>
