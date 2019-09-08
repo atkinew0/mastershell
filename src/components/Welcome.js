@@ -49,7 +49,7 @@ class Welcome extends React.Component {
                 </Modal>
     
             <div style={{margin:'50px'}}>
-                <center><iframe style={{frameStyle}} width="600" height="400" src="https://www.youtube.com/embed/9YffrCViTVk" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
+                <center><iframe style={{frameStyle}} width="600" height="400" src="https://youtu.be/1mWlWLZFABY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
             </div>
             <center><button onClick={this.showModal} className="ui button primary massive">Start</button></center>
             <Footer />
