@@ -7,7 +7,7 @@ export const getUserId = (token) => (dispatch) => new Promise ((resolve,reject) 
     const myHeaders = new Headers();
     myHeaders.append('Authorization',token);
 
-    fetch(`https://${HOST}/userid`, {headers:myHeaders})
+    fetch(`http://${HOST}/userid`, {headers:myHeaders})
     .then( response => {
         return response.json();
     })

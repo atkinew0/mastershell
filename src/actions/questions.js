@@ -5,7 +5,7 @@ const HOST = process.env.REACT_APP_BACKEND || "mv2-dev.us-east-1.elasticbeanstal
 export const getQuestions = (level) => (dispatch) => new Promise((resolve,reject) => {
 
     
-        const theReq = `https://${ HOST }/api/level/${level}`;
+        const theReq = `http://${ HOST }/api/level/${level}`;
         const myHeaders = new Headers();
         myHeaders.append('Authorization',localStorage.getItem('token'))
 
