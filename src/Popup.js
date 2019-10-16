@@ -94,7 +94,7 @@ export default class Popup extends React.Component {
             uid:this.props.userID
         }
 
-        const theReq = `http://${ HOST }/api/srs`;
+        const theReq = `https://${ HOST }/api/srs`;
 
         fetch(theReq, {
             body: JSON.stringify(theBody), // data can be `string` or {object}!

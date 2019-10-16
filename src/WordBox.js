@@ -38,7 +38,7 @@ class WordBox extends React.Component {
         myHeaders.append('Authorization',localStorage.getItem('token'));
 
         
-        const theRequest = `http://${HOST}/api/srs/?uid=${this.props.userID}`;
+        const theRequest = `https://${HOST}/api/srs/?uid=${this.props.userID}`;
 
         fetch(theRequest,{ method:'GET', headers:myHeaders}).then( response => {
 

@@ -38,7 +38,7 @@ Terminal.applyAddon(search);
 Terminal.applyAddon(winptyCompat);
 
 const HOST = process.env.REACT_APP_BACKEND || "mv-dev.us-east-1.elasticbeanstalk.com";
-const SOCKET_URL = `ws://${ HOST }/terminals/`;
+const SOCKET_URL = `wss://${ HOST }/terminals/`;
 
 const containerStyle ={
   position: 'absolute',
@@ -398,7 +398,7 @@ class ReactTerminal extends React.Component {
       const myHeaders = new Headers();
       myHeaders.append('Authorization',localStorage.getItem('token'));
 
-      fetch(`http://${HOST}/api/user?uid=${uid}&level=${newLevel}`,{method:'POST', headers:myHeaders})
+      fetch(`https://${HOST}/api/user?uid=${uid}&level=${newLevel}`,{method:'POST', headers:myHeaders})
       .then(response => console.log(response));
 
     }
@@ -428,7 +428,7 @@ class ReactTerminal extends React.Component {
       questions:this.props.questions
     }
 
-    let theReq = `http://${HOST}/api/srs`;
+    let theReq = `https://${HOST}/api/srs`;
 
     fetch(theReq, {
       body: JSON.stringify(theBody), // data can be `string` or {object}!
@@ -481,7 +481,7 @@ class ReactTerminal extends React.Component {
     .then ( () => {
       
 
-      fetch(`http://${HOST}/api/user?uid=${this.props.userId}`)
+      fetch(`https://${HOST}/api/user?uid=${this.props.userId}`)
       .then ( response => {
           return response.json()})
       .then( text => {
@@ -536,7 +536,7 @@ class ReactTerminal extends React.Component {
 
   _connectToServer() {
 
-    const theReq = `http://${ HOST }/terminals/?cols=${ this.term.cols }&rows=${ this.term.rows }`;
+    const theReq = `https://${ HOST }/terminals/?cols=${ this.term.cols }&rows=${ this.term.rows }`;
     const myHeaders = new Headers();
     myHeaders.append('Authorization',localStorage.getItem('token'))
 

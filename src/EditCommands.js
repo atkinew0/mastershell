@@ -101,7 +101,7 @@ class EditCommands extends React.Component{
         myHeaders.append('Authorization',localStorage.getItem('token'));
         myHeaders.append('Content-Type', 'application/json');
 
-        const theReq = `http://${ HOST }/api/srs/all?uid=${this.props.userID}`;
+        const theReq = `https://${ HOST }/api/srs/all?uid=${this.props.userID}`;
 
         fetch(theReq, {method:'GET', headers:myHeaders}).then( (res,err) => {
             if(err)
@@ -148,7 +148,7 @@ class EditCommands extends React.Component{
             
             this.setState({askDelete:false, confirmDelete:false})
 
-            const theReq = `http://${ HOST }/api/srs/delete`;
+            const theReq = `https://${ HOST }/api/srs/delete`;
 
             const theBody = {
                 user:this.props.userID,

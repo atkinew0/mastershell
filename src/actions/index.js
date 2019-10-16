@@ -4,7 +4,7 @@ const HOST = process.env.REACT_APP_BACKEND || "mv-dev.us-east-1.elasticbeanstalk
 
 export const signup = ({email, password}, callback) => async dispatch => {
     try{
-    const response = await axios.post(`http://${HOST}/signup`, { email, password})
+    const response = await axios.post(`https://${HOST}/signup`, { email, password})
     
 
     dispatch({ type: AUTH_USER, payload: response.data.token } ); 
@@ -27,7 +27,7 @@ export const signout = () => {
 
 export const signin = ({email, password}, callback) => async dispatch => {
     try{
-    const response = await axios.post(`http://${HOST}/signin`, { email, password})
+    const response = await axios.post(`https://${HOST}/signin`, { email, password})
     
 
     dispatch({ type: AUTH_USER, payload: response.data.token } );
