@@ -131,4 +131,4 @@ class WordBox extends React.Component {
 }
 
 
-export default WordBox;;
+export default WordBox;
