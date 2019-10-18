@@ -57,6 +57,7 @@ class ReactTerminal extends React.Component {
   constructor(props) {
     super(props);
 
+    this.terminalRef = React.createRef();
     this.elementId = `terminal_1`;
     this.failures = 0;
     this.interval = null;
@@ -76,7 +77,7 @@ class ReactTerminal extends React.Component {
     });
 
 
-    this.term.open(document.getElementById('terminal-container'));
+    this.term.open(this.terminalRef.current);
     this.term.winptyCompatInit();
     this.term.fit();
     this.term.focus();
@@ -516,7 +517,7 @@ class ReactTerminal extends React.Component {
          questionsCall={this.handleSRS} 
          words={this.props.command}/>
 
-        <div id={"terminal-container"}></div>
+        <div ref={this.terminalRef} id={"terminal-container"}></div>
 
         <ControlBox 
          completed={this.completed()}
