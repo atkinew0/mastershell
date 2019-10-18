@@ -149,7 +149,7 @@ class ReactTerminal extends React.Component {
 
   next() {
 
-    console.log("Current nextQ",this.props.nextQuestion, this.props.questions.length)
+
 
     if((this.props.nextQuestion + 1) === this.props.questions.length){
 
@@ -224,7 +224,6 @@ class ReactTerminal extends React.Component {
     let questions = questionsArray.questions;
     let noneDue = questionsArray.noneDue;
 
-    console.log("Handlsrs got back qustions array of",questionsArray);
 
     if(noneDue){
       console.log("No questions due found")
@@ -300,7 +299,6 @@ class ReactTerminal extends React.Component {
 
     if(this.props.mode !== 'levels' && this.props.mode !== 'srs') return;
    
-    console.log("Console logging textarea", this.term);
     //answer = answer.replace(pattern," ");
     
     let questions = this.props.questions;
