@@ -40,7 +40,7 @@ export default class ControlBox extends React.Component {
         if(levelClicked <= nextLevel){
 
 
-            const theReq = `https://${ HOST }/api/level/${levelClicked}`;
+            const theReq = `http://${ HOST }/api/level/${levelClicked}`;
             const myHeaders = new Headers();
             myHeaders.append('Authorization',localStorage.getItem('token'))
 
